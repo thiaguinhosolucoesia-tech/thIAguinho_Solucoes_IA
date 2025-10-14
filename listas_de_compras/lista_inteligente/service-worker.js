@@ -83,6 +83,3 @@ self.addEventListener('message', event => {
         self.skipWaiting();
     }
 });
-
-
-importScripts("../../config.js");

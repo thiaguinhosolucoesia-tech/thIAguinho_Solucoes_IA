@@ -41,6 +41,7 @@
         </div>
         <div class="container">
             <h2>Gerenciamento de Usuários</h2>
+            <div id="online-users-count" style="margin-bottom: 15px; font-weight: 600;">Usuários Online: 0</div>
             <div id="user-list"></div>
         </div>
     </div>
@@ -62,24 +63,18 @@
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
-    <script src="config.js"></script>
-
+    <script src="firebase-config.js"></script>
     <script>
-        firebase.initializeApp(AppConfig.firebaseConfig);
-        const auth = firebase.auth();
-        const database = firebase.database();
-
-        document.addEventListener('DOMContentLoaded', () => {
-            const adminToken = sessionStorage.getItem('admin_access_token');
-
-            if (adminToken === 'true') {
-                sessionStorage.removeItem('admin_access_token');
+        document.addEventListener("DOMContentLoaded", () => {
+            const adminToken = sessionStorage.getItem("admin_access_token");
+            if (adminToken === "true") {
+                sessionStorage.removeItem("admin_access_token");
                 
                 auth.onAuthStateChanged(user => {
                     if (user) {
-                        document.getElementById('loading').style.display = 'none';
-                        document.getElementById('access-denied').style.display = 'none';
-                        document.getElementById('admin-panel').style.display = 'block';
+                        document.getElementById("loading").style.display = "none";
+                        document.getElementById("access-denied").style.display = "none";
+                        document.getElementById("admin-panel").style.display = "block";
                         loadUsers();
                     } else {
                         showAccessDenied();
@@ -91,37 +86,50 @@
         });
 
         function showAccessDenied() {
-            document.getElementById('loading').style.display = 'none';
-            document.getElementById('admin-panel').style.display = 'none';
-            document.getElementById('access-denied').style.display = 'block';
+            document.getElementById("loading").style.display = "none";
+            document.getElementById("admin-panel").style.display = "none";
+            document.getElementById("access-denied").style.display = "block";
         }
 
         function loadUsers() {
             try {
-                const usersRef = database.ref('users_public_list');
-                usersRef.on('value', (snapshot) => {
-                    const users = snapshot.val() ? Object.values(snapshot.val()) : [];
-                    const userListDiv = document.getElementById('user-list');
-                    userListDiv.innerHTML = '';
+                const usersRef = database.ref("users_public_list");
+                usersRef.on("value", async (snapshot) => {
+                    const allUsers = snapshot.val() ? Object.values(snapshot.val()) : [];
+                    const onlineUsersSnapshot = await database.ref("users_online").once("value");
+                    const onlineUsers = onlineUsersSnapshot.val() || {};
+                    let onlineCount = 0;
+
+                    const usersWithStatus = allUsers.map(user => {
+                        const isOnline = !!onlineUsers[user.uid];
+                        if (isOnline) onlineCount++;
+                        return { ...user, isOnline };
+                    });
+                    document.getElementById("online-users-count").textContent = `Usuários Online: ${onlineCount}`;
+                    const userListDiv = document.getElementById("user-list");
+                    userListDiv.innerHTML = "";
                     
-                    users.sort((a, b) => a.email.localeCompare(b.email)).forEach(user => {
-                        const card = document.createElement('div');
-                        card.className = 'user-card';
+                    usersWithStatus.sort((a, b) => a.email.localeCompare(b.email)).forEach(user => {
+                        const card = document.createElement("div");
+                        card.className = "user-card";
                         card.innerHTML = `
                             <div class="user-info">
-                                <span class="user-email">${user.email} ${user.role === 'admin' ? '<strong>(Admin)</strong>' : ''}</span>
+                                <span class="user-email">${user.email} ${user.role === "admin" ? "<strong>(Admin)</strong>" : ""}</span>
                                 <span class="user-uid">UID: ${user.uid}</span>
-                                <span class="user-status" style="color: ${user.isBlocked ? 'var(--danger-color)' : 'var(--success-color)'};">
-                                    Status: ${user.isBlocked ? 'Bloqueado' : 'Ativo'}
+                                <span class="user-status" style="color: ${user.isBlocked ? "var(--danger-color)" : "var(--success-color)"};">
+                                    Status: ${user.isBlocked ? "Bloqueado" : "Ativo"}
+                                </span>
+                                <span class="user-online-status" style="color: ${user.isOnline ? "var(--success-color)" : "var(--text-light)"}; font-size: 0.9em;">
+                                    ${user.isOnline ? "Online" : "Offline"}
                                 </span>
                             </div>
                             <div class="user-actions">
-                                <button class="btn-view" onclick="viewUserData('${user.uid}', '${user.email}')">Ver Uso</button>
-                                ${user.role !== 'admin' ? `
-                                <button class="${user.isBlocked ? 'btn-unblock' : 'btn-block'}" onclick="toggleUserBlock('${user.uid}', ${user.isBlocked || false})">
-                                    ${user.isBlocked ? 'Desbloquear' : 'Bloquear'}
+                                <button class="btn-view" onclick="viewUserData(\'${user.uid}\', \'${user.email}\')">Ver Uso</button>
+                                ${user.role !== "admin" ? `
+                                <button class="${user.isBlocked ? "btn-unblock" : "btn-block"}" onclick="toggleUserBlock(\'${user.uid}\', ${user.isBlocked || false})">
+                                    ${user.isBlocked ? "Desbloquear" : "Bloquear"}
                                 </button>
-                                ` : ''}
+                                ` : ""}
                             </div>
                         `;
                         userListDiv.appendChild(card);
@@ -129,7 +137,7 @@
                 });
             } catch (error) {
                 console.error("Erro ao carregar usuários:", error);
-                document.getElementById('user-list').innerHTML = `<p>Ocorreu um erro ao carregar a lista de usuários.</p>`;
+                document.getElementById("user-list").innerHTML = `<p>Ocorreu um erro ao carregar a lista de usuários.</p>`;
             }
         }
         
@@ -157,7 +165,6 @@
             modal.style.display = 'flex';
 
             try {
-                // A nova regra de segurança permite esta leitura
                 const dataRef = database.ref(`easy_lists/${uid}`);
                 const snapshot = await dataRef.once('value');
                 const userData = snapshot.val();

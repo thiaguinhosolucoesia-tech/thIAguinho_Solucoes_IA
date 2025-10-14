@@ -10,10 +10,10 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
-    <script src="../../config.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+    <script src="../firebase-config.js"></script>
     
     <style>
         body { font-family: 'Poppins', sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; -webkit-tap-highlight-color: transparent; }
@@ -100,7 +100,20 @@
     <div id="relatorio-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 hidden z-50 backdrop-blur-sm"><div class="bg-white rounded-2xl shadow-2xl w-full max-w-3xl transform transition-all flex flex-col" style="max-height: 90vh;"><div id="relatorio-imprimir" class="p-6 sm:p-8"><div class="flex justify-between items-center mb-4"><div><h2 class="text-2xl font-bold">Relatório de Tratamento</h2><p class="text-gray-500 mt-1">Progresso geral até <span id="relatorio-data"></span></p></div><button type="button" id="btn-close-relatorio-x" class="text-gray-400 hover:text-gray-600 text-3xl leading-none no-print">&times;</button></div><div class="mb-6 p-4 bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg"><div class="grid grid-cols-3 gap-4 text-center"><div><p class="text-2xl font-bold text-blue-600" id="stats-total">0</p><p class="text-sm text-gray-600">Total de Tratamentos</p></div><div><p class="text-2xl font-bold text-green-600" id="stats-ativos">0</p><p class="text-sm text-gray-600">Ativos</p></div><div><p class="text-2xl font-bold text-purple-600" id="stats-concluidos">0</p><p class="text-sm text-gray-600">Concluídos</p></div></div></div><div id="relatorio-conteudo" class="space-y-4 overflow-y-auto" style="max-height: 50vh;"></div></div><div class="flex justify-between gap-4 p-4 bg-gray-50 border-t rounded-b-2xl no-print"><button type="button" id="btn-exportar-csv" class="px-6 py-2 bg-green-600 text-white font-semibold rounded-lg hover:bg-green-700 transition">Exportar CSV</button><div class="flex gap-2"><button type="button" id="btn-fechar-relatorio" class="px-6 py-2 bg-gray-200 rounded-lg hover:bg-gray-300 transition">Fechar</button><button type="button" id="btn-salvar-relatorio" class="px-6 py-2 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition">Imprimir</button></div></div></div></div>
     <div id="modal-conclusao" class="fixed inset-0 bg-gradient-to-br from-green-500 to-green-700 bg-opacity-95 flex items-center justify-center p-4 hidden z-50 backdrop-blur-sm"><div class="text-center text-white"><div class="text-9xl animate-bounce mb-6">🎉</div><h2 class="text-4xl sm:text-5xl font-bold mt-4">Parabéns!</h2><p class="text-xl sm:text-2xl mt-4 max-w-lg">Você tomou todos os medicamentos de hoje! Continue assim! 👏</p><div class="mt-8 p-6 bg-white/20 rounded-2xl backdrop-blur-sm"><p class="text-lg">Seu compromisso com a saúde é inspirador!</p></div><button id="btn-reset" class="btn-principal mt-10 bg-white text-green-600 font-bold py-4 px-8 rounded-full shadow-lg text-xl hover:bg-gray-100 transition">Entendido</button></div></div>
     <div id="modal-confirmar-exclusao" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 hidden z-50 backdrop-blur-sm"><div class="bg-white rounded-2xl shadow-2xl w-full max-w-md p-6 sm:p-8"><div class="text-center"><div class="text-6xl mb-4">⚠️</div><h3 class="text-2xl font-bold mb-2">Confirmar Exclusão</h3><p class="text-gray-600 mb-6">Tem certeza que deseja excluir este tratamento? Esta ação não pode ser desfeita.</p><div class="flex gap-4 justify-center"><button type="button" id="btn-cancelar-exclusao" class="px-6 py-3 bg-gray-200 rounded-lg hover:bg-gray-300 transition">Cancelar</button><button type="button" id="btn-confirmar-exclusao" class="px-6 py-3 bg-red-600 text-white font-semibold rounded-lg hover:bg-red-700 transition">Sim, Excluir</button></div></div></div></div>
-    <div id="modal-notificacoes" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 hidden z-50 backdrop-blur-sm"><div class="bg-white rounded-2xl shadow-2xl w-full max-w-md p-6 sm:p-8"><div class="flex justify-between items-center mb-4"><h3 class="text-2xl font-bold">Configurações de Notificações</h3><button type="button" id="btn-close-notificacoes-x" class="text-gray-400 hover:text-gray-600 text-3xl leading-none">&times;</button></div><div class="space-y-4"><div class="p-4 bg-yellow-50 rounded-lg"><p class="text-sm text-yellow-800">A funcionalidade de notificações está em desenvolvimento e será aprimorada em breve.</p></div></div><div class="mt-6 flex justify-end"><button type="button" id="btn-fechar-notificacoes" class="px-6 py-2 bg-gray-200 rounded-lg hover:bg-gray-300 transition">Fechar</button></div></di        firebase.initializeApp(AppConfig.firebaseConfig);
+    <div id="modal-notificacoes" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 hidden z-50 backdrop-blur-sm"><div class="bg-white rounded-2xl shadow-2xl w-full max-w-md p-6 sm:p-8"><div class="flex justify-between items-center mb-4"><h3 class="text-2xl font-bold">Configurações de Notificações</h3><button type="button" id="btn-close-notificacoes-x" class="text-gray-400 hover:text-gray-600 text-3xl leading-none">&times;</button></div><div class="space-y-4"><div class="p-4 bg-yellow-50 rounded-lg"><p class="text-sm text-yellow-800">A funcionalidade de notificações está em desenvolvimento e será aprimorada em breve.</p></div></div><div class="mt-6 flex justify-end"><button type="button" id="btn-fechar-notificacoes" class="px-6 py-2 bg-gray-200 rounded-lg hover:bg-gray-300 transition">Fechar</button></div></div></div>
+
+<script>
+    const firebaseConfig = {
+        apiKey: "AIzaSyA9WEvRwaDuEDFlTlIwPxKvNr6hcNlYFbI",
+        authDomain: "thiaguinho-solucoes.firebaseapp.com",
+        databaseURL: "https://thiaguinho-solucoes-default-rtdb.firebaseio.com",
+        projectId: "thiaguinho-solucoes",
+        storageBucket: "thiaguinho-solucoes.firebasestorage.app",
+        messagingSenderId: "879610267391",
+        appId: "1:879610267391:web:bc48a54e0ce8e541feeeca"
+    };
+
+    firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
     const database = firebase.database();
     

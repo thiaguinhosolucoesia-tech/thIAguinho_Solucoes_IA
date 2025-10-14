@@ -178,8 +178,7 @@
         <p class="signature">Desenvolvido por thiAguinho Soluções</p>
     </footer>
 
-    <script src="../../config.js"></script>
-<script>
+    <script>
     // --- CONSOLIDATED SCRIPT BLOCK V3.1 ---
     // Dev Note: All JS logic is now in this single block to prevent race conditions and ensure DOM is ready.
 
@@ -222,21 +221,6 @@
             { id: 'd07', time: "20:00", title: "👋 Encerramento", location: "Todo o Evento" },
         ]
     };
-
-    const eventSchedule = [];
-    Object.keys(fullSchedule).forEach(day => {
-        const date = day === 'sabado' ? '2025-10-04' : '2025-10-05';
-        fullSchedule[day].forEach(event => {
-            const [hours, minutes] = event.time.split(':');
-            const start = new Date(`${date}T${event.time}:00-03:00`);
-            const end = new Date(start.getTime() + 60 * 60 * 1000);
-            eventSchedule.push({
-                name: event.title,
-                start: start,
-                end: end
-            });
-        });
-    });
 
     // --- CORE FUNCTIONS ---
     function openTab(evt, tabName) {

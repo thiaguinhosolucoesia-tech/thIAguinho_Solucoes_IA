@@ -30,7 +30,9 @@
         .modal-header h2 { margin: 0; font-size: 1.5em; color: var(--primary-blue); }
         .modal-header .close-btn { font-size: 28px; color: var(--text-light); cursor: pointer; background: none; border: none; }
         .modal-body { padding: 25px; overflow-y: auto; }
-        .modal-body pre { white-space: pre-wrap; word-wrap: break-word; background-color: #f8f9fa; padding: 15px; border-radius: 8px; font-size: 0.9em; }
+        .usage-summary p { margin: 0 0 10px; font-size: 1.1rem; }
+        .usage-summary strong { color: var(--primary-blue); }
+        .usage-summary hr { border: 0; height: 1px; background-color: #eee; margin: 15px 0; }
     </style>
 </head>
 <body>
@@ -54,8 +56,8 @@
                 <h2 id="usage-modal-title">Dados do Usuário</h2>
                 <button class="close-btn" id="close-usage-modal">&times;</button>
             </div>
-            <div class="modal-body">
-                <pre id="usage-modal-content">Carregando dados...</pre>
+            <div class="modal-body" id="usage-modal-content">
+                Carregando dados...
             </div>
         </div>
     </div>
@@ -70,12 +72,18 @@
             if (adminToken === "true") {
                 sessionStorage.removeItem("admin_access_token");
                 
-                auth.onAuthStateChanged(user => {
+                auth.onAuthStateChanged(async (user) => {
                     if (user) {
-                        document.getElementById("loading").style.display = "none";
-                        document.getElementById("access-denied").style.display = "none";
-                        document.getElementById("admin-panel").style.display = "block";
-                        loadUsers();
+                        const roleRef = database.ref(`users_public_list/${user.uid}/role`);
+                        const snapshot = await roleRef.once('value');
+                        if (snapshot.val() === 'admin') {
+                            document.getElementById("loading").style.display = "none";
+                            document.getElementById("access-denied").style.display = "none";
+                            document.getElementById("admin-panel").style.display = "block";
+                            loadUsers();
+                        } else {
+                            showAccessDenied("Você não tem permissão de administrador.");
+                        }
                     } else {
                         showAccessDenied();
                     }
@@ -85,10 +93,12 @@
             }
         });
 
-        function showAccessDenied() {
+        function showAccessDenied(message = "Acesso negado. Retorne ao dashboard e use o código de acesso.") {
             document.getElementById("loading").style.display = "none";
             document.getElementById("admin-panel").style.display = "none";
-            document.getElementById("access-denied").style.display = "block";
+            const accessDeniedDiv = document.getElementById("access-denied");
+            accessDeniedDiv.style.display = "block";
+            accessDeniedDiv.querySelector('p').textContent = message;
         }
 
         function loadUsers() {
@@ -124,9 +134,9 @@
                                 </span>
                             </div>
                             <div class="user-actions">
-                                <button class="btn-view" onclick="viewUserData(\'${user.uid}\', \'${user.email}\')">Ver Uso</button>
+                                <button class="btn-view" onclick="viewUserData('${user.uid}', '${user.email}')">Ver Uso</button>
                                 ${user.role !== "admin" ? `
-                                <button class="${user.isBlocked ? "btn-unblock" : "btn-block"}" onclick="toggleUserBlock(\'${user.uid}\', ${user.isBlocked || false})">
+                                <button class="${user.isBlocked ? "btn-unblock" : "btn-block"}" onclick="toggleUserBlock('${user.uid}', ${user.isBlocked || false})">
                                     ${user.isBlocked ? "Desbloquear" : "Bloquear"}
                                 </button>
                                 ` : ""}
@@ -160,23 +170,66 @@
             const title = document.getElementById('usage-modal-title');
             const content = document.getElementById('usage-modal-content');
 
-            title.textContent = `Dados de: ${email}`;
-            content.textContent = 'Carregando dados...';
+            title.textContent = `Resumo de Uso: ${email}`;
+            content.innerHTML = '<p>Calculando métricas de uso...</p>';
             modal.style.display = 'flex';
 
             try {
-                const dataRef = database.ref(`easy_lists/${uid}`);
-                const snapshot = await dataRef.once('value');
-                const userData = snapshot.val();
+                const promises = [
+                    database.ref(`shopping_lists/${uid}`).once('value'),
+                    database.ref(`purchase_reports/${uid}`).once('value'),
+                    database.ref(`easy_lists/${uid}`).once('value'),
+                    database.ref(`enfermeiro_inteligente/${uid}`).once('value')
+                ];
+                const [shoppingSnapshot, reportsSnapshot, easyListsSnapshot, enfermeiroSnapshot] = await Promise.all(promises);
+
+                const shoppingData = shoppingSnapshot.val();
+                const reportsData = reportsSnapshot.val();
+                const easyListsData = easyListsSnapshot.val();
+                const enfermeiroData = enfermeiroSnapshot.val();
+
+                let totalDataSize = 0;
+                let summaryHtml = '<div class="usage-summary">';
+
+                const shoppingItemsCount = shoppingData ? Object.keys(shoppingData).length : 0;
+                const easyListItemsCount = easyListsData && easyListsData.items ? Object.keys(easyListsData.items).length : 0;
+                summaryHtml += `<p><strong>Listas de Compras:</strong> ${shoppingItemsCount + easyListItemsCount} itens criados.</p>`;
+
+                const reportsCount = reportsData ? Object.keys(reportsData).length : 0;
+                summaryHtml += `<p><strong>Relatórios de Compra:</strong> ${reportsCount} relatórios salvos.</p>`;
                 
-                if (userData) {
-                    content.textContent = JSON.stringify(userData, null, 2);
-                } else {
-                    content.textContent = 'Nenhum dado encontrado para este usuário no nó "easy_lists".';
+                const briefingsCount = easyListsData && easyListsData.paineis_de_inteligencia ? Object.keys(easyListsData.paineis_de_inteligencia).length : 0;
+                summaryHtml += `<p><strong>Gerador de Briefing:</strong> ${briefingsCount} briefings criados.</p>`;
+
+                const diarioCount = easyListsData && easyListsData.diario_de_bordo ? Object.keys(easyListsData.diario_de_bordo).length : 0;
+                summaryHtml += `<p><strong>Diário de Bordo:</strong> ${diarioCount} registros diários.</p>`;
+
+                let patientsCount = 0;
+                let remediosCount = 0;
+                if (enfermeiroData && enfermeiroData.patients) {
+                    patientsCount = Object.keys(enfermeiroData.patients).length;
+                    Object.values(enfermeiroData.patients).forEach(patient => {
+                        if (patient.remedios) {
+                            remediosCount += Object.keys(patient.remedios).length;
+                        }
+                    });
                 }
+                summaryHtml += `<p><strong>Controle de Remédios:</strong> ${remediosCount} tratamentos para ${patientsCount} pacientes.</p>`;
+
+                totalDataSize += JSON.stringify(shoppingData).length;
+                totalDataSize += JSON.stringify(reportsData).length;
+                totalDataSize += JSON.stringify(easyListsData).length;
+                totalDataSize += JSON.stringify(enfermeiroData).length;
+                
+                const dataInKB = (totalDataSize / 1024).toFixed(2);
+                summaryHtml += `<hr><p><strong>Estimativa de Uso Total de Dados:</strong> ${dataInKB} KB</p>`;
+                
+                summaryHtml += '</div>';
+                content.innerHTML = summaryHtml;
+
             } catch (error) {
                 console.error("Erro ao buscar dados do usuário:", error);
-                content.textContent = `Erro ao carregar dados. Verifique as regras de segurança e o console.\n\n${error.message}`;
+                content.innerHTML = `<p style="color: var(--danger-color);">Erro ao carregar dados. Verifique o console para mais detalhes.</p><pre>${error.message}</pre>`;
             }
         }
 

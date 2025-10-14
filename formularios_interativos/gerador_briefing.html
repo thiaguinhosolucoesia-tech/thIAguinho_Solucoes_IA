@@ -4,12 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>Painel de Inteligência & Estruturação</title>
-    
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
-    <script src="firebase-config.js"></script>
-    
+    <script src="../firebase-config.js"></script>
     <style>
         :root {
             --primary-color: #34495e; --accent-color: #1abc9c; --dark-color: #2c3e50;
@@ -25,8 +23,7 @@
 
         #auth-container { display: none; align-items: center; justify-content: center; padding: 50px 20px; text-align: center; }
         .auth-box { background: var(--white-color); padding: 40px; border-radius: 12px; }
-        .auth-box h1 { color: var(--danger-color); }
-        .auth-box p { color: var(--gray-color); margin-top: 10px; }
+        .auth-box h1 { color: var(--danger-color); } .auth-box p { color: var(--gray-color); margin-top: 10px; }
         
         #app-header { display: flex; justify-content: space-between; align-items: center; padding: 15px 30px; background-color: var(--white-color); border-bottom: 1px solid #eee; }
         .header-left { display: flex; align-items: center; gap: 20px; }
@@ -36,7 +33,7 @@
         #app-header #logout-btn { background: var(--danger-color); color: white; border: none; padding: 8px 12px; border-radius: 6px; cursor: pointer; font-weight: 600; }
         
         .tab-navigation { display: flex; background-color: #34495e; }
-        .tab-btn { flex: 1; padding: 15px; background: none; border: none; color: var(--light-color); font-size: 1.1em; font-weight: 500; cursor: pointer; border-bottom: 3px solid transparent; transition: all 0.3s; }
+        .tab-btn { flex: 1; padding: 15px; background: none; border: none; color: var(--light-color); font-size: 1.1em; font-weight: 500; cursor: pointer; border-bottom: 3px solid transparent; }
         .tab-btn.active { background-color: var(--white-color); color: var(--dark-color); border-bottom-color: var(--accent-color); }
         .tab-content { display: none; } .tab-content.active { display: block; } .form-content { padding: 30px; }
         .form-section { margin-bottom: 40px; border: 1px solid #ddd; border-radius: 12px; overflow: hidden; }
@@ -68,7 +65,7 @@
         <header id="app-header">
              <div class="header-left">
                 <a href="../dashboard.html" class="back-btn"><span>&larr;</span> Voltar</a>
-            </div>
+                </div>
             <span id="user-email"></span>
             <button id="logout-btn">Sair</button>
         </header>
@@ -106,8 +103,9 @@
     <div class="report-overlay" id="report-overlay"><div class="report-panel" id="report-panel"><div class="report-header"><h2 id="report-title">Relatório</h2><button class="close-btn" id="close-report-btn">&times;</button></div><div class="report-body" id="report-output"></div><div class="report-footer"><button class="btn-copy" id="copy-report-btn">Copiar</button></div></div></div>
 
 <script>
-
-
+// =============== CONFIGURAÇÃO DO BRIEFING CUSTOMIZÁVEL ===============
+// Edite este objeto para criar qualquer tipo de formulário de briefing.
+// A interface será construída automaticamente a partir daqui.
 const briefingConfig = {
     modules: [
         { 
@@ -152,6 +150,7 @@ const briefingConfig = {
         }
     ]
 };
+// =====================================================================
 
 document.addEventListener('DOMContentLoaded', function() {
     const App = {
@@ -169,15 +168,8 @@ document.addEventListener('DOMContentLoaded', function() {
         },
 
         addAuthListeners() {
-             auth.onAuthStateChanged(async (user) => {
+             auth.onAuthStateChanged(user => {
                 if (user) {
-                    const blockRef = database.ref(`users_public_list/${user.uid}/isBlocked`);
-                    const snapshot = await blockRef.once('value');
-                    if (snapshot.val() === true) {
-                        document.body.innerHTML = `<div style="text-align: center; padding: 50px; font-family: 'Poppins', sans-serif;"><h1>Acesso Bloqueado</h1><p>Sua conta foi bloqueada por um administrador.</p><p><a href="../dashboard.html">Voltar</a></p></div>`;
-                        return;
-                    }
-
                     this.currentUser = user;
                     document.getElementById('user-email').textContent = user.email;
                     this.showView('app');
@@ -195,7 +187,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 html += `<div class="form-section"><div class="section-header"><h2>${m.icon} ${m.title}</h2></div><div class="section-body">`;
                 m.fields.forEach(f => {
                     html += `<div class="form-group"><label for="${f.id}">${f.label}<small>${f.help}</small></label>`;
-                    if (f.type === 'textarea') html += `<textarea id="${f.id}" name="${f.id}"></textarea>`;
+                    if (f.type === 'textarea') html += `<textarea id="${f.id}" name="${f.id}"></textarea>`; 
                     else html += `<input type="text" id="${f.id}" name="${f.id}">`;
                     html += `</div>`;
                 });
@@ -244,6 +236,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
             const briefingId = `${Date.now()}-${projectName.replace(/\s+/g, '-')}`;
             try {
+                // CAMINHO ADAPTADO PARA AS REGRAS FORNECIDAS
                 await database.ref(`easy_lists/${this.currentUser.uid}/paineis_de_inteligencia/${briefingId}`).set({
                     projectName: projectName,
                     createdAt: new Date().toISOString(),

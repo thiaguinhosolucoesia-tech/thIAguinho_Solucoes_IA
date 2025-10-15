@@ -175,52 +175,45 @@
             modal.style.display = 'flex';
 
             try {
-                const promises = [
-                    database.ref(`shopping_lists/${uid}`).once('value'),
-                    database.ref(`purchase_reports/${uid}`).once('value'),
-                    database.ref(`easy_lists/${uid}`).once('value'),
-                    database.ref(`enfermeiro_inteligente/${uid}`).once('value')
-                ];
-                const [shoppingSnapshot, reportsSnapshot, easyListsSnapshot, enfermeiroSnapshot] = await Promise.all(promises);
+                const easyListsRef = database.ref(`easy_lists/${uid}`);
+                const snapshot = await easyListsRef.once('value');
+                const data = snapshot.val() || {};
 
-                const shoppingData = shoppingSnapshot.val();
-                const reportsData = reportsSnapshot.val();
-                const easyListsData = easyListsSnapshot.val();
-                const enfermeiroData = enfermeiroSnapshot.val();
-
-                let totalDataSize = 0;
                 let summaryHtml = '<div class="usage-summary">';
 
-                const shoppingItemsCount = shoppingData ? Object.keys(shoppingData).length : 0;
-                const easyListItemsCount = easyListsData && easyListsData.items ? Object.keys(easyListsData.items).length : 0;
-                summaryHtml += `<p><strong>Listas de Compras:</strong> ${shoppingItemsCount + easyListItemsCount} itens criados.</p>`;
+                // Contagem para Listas de Compras (todas as versões)
+                const listaFacilCount = data.items ? Object.keys(data.items).length : 0;
+                const listaRapidaCount = data.shopping_list_rapida?.items ? Object.keys(data.shopping_list_rapida.items).length : 0;
+                summaryHtml += `<p><strong>Listas de Compras:</strong> ${listaFacilCount + listaRapidaCount} itens criados.</p>`;
 
-                const reportsCount = reportsData ? Object.keys(reportsData).length : 0;
+                // Relatórios de Compra (se existir)
+                const reportsCount = data.shopping_reports?.reports ? Object.keys(data.shopping_reports.reports).length : 0;
                 summaryHtml += `<p><strong>Relatórios de Compra:</strong> ${reportsCount} relatórios salvos.</p>`;
-                
-                const briefingsCount = easyListsData && easyListsData.paineis_de_inteligencia ? Object.keys(easyListsData.paineis_de_inteligencia).length : 0;
+
+                // Gerador de Briefing
+                const briefingsCount = data.paineis_de_inteligencia ? Object.keys(data.paineis_de_inteligencia).length : 0;
                 summaryHtml += `<p><strong>Gerador de Briefing:</strong> ${briefingsCount} briefings criados.</p>`;
 
-                const diarioCount = easyListsData && easyListsData.diario_de_bordo ? Object.keys(easyListsData.diario_de_bordo).length : 0;
+                // Diário de Bordo
+                const diarioCount = data.diario_de_bordo ? Object.keys(data.diario_de_bordo).length : 0;
                 summaryHtml += `<p><strong>Diário de Bordo:</strong> ${diarioCount} registros diários.</p>`;
 
-                let patientsCount = 0;
+                // Controle de Remédios
+                const enfermeiroData = data.enfermeiro_inteligente || {};
+                const patients = enfermeiroData.patients || {};
+                const patientsCount = Object.keys(patients).length;
                 let remediosCount = 0;
-                if (enfermeiroData && enfermeiroData.patients) {
-                    patientsCount = Object.keys(enfermeiroData.patients).length;
-                    Object.values(enfermeiroData.patients).forEach(patient => {
-                        if (patient.remedios) {
-                            remediosCount += Object.keys(patient.remedios).length;
-                        }
-                    });
+                // Itera sobre os nós de cada paciente para somar os tratamentos
+                for (const patientId of Object.keys(patients)) {
+                    const patientNode = enfermeiroData[patientId];
+                    if (patientNode && Array.isArray(patientNode.tratamentos)) {
+                        remediosCount += patientNode.tratamentos.length;
+                    }
                 }
                 summaryHtml += `<p><strong>Controle de Remédios:</strong> ${remediosCount} tratamentos para ${patientsCount} pacientes.</p>`;
 
-                totalDataSize += JSON.stringify(shoppingData).length;
-                totalDataSize += JSON.stringify(reportsData).length;
-                totalDataSize += JSON.stringify(easyListsData).length;
-                totalDataSize += JSON.stringify(enfermeiroData).length;
-                
+                // Cálculo do tamanho total
+                const totalDataSize = JSON.stringify(data).length;
                 const dataInKB = (totalDataSize / 1024).toFixed(2);
                 summaryHtml += `<hr><p><strong>Estimativa de Uso Total de Dados:</strong> ${dataInKB} KB</p>`;
                 

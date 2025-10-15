@@ -13,7 +13,6 @@ const firebaseConfig = {
 const ADMIN_TRIGGER_KEY = 'KjE3Nw=='; // Base64 para '*177'
 
 // INICIALIZA O FIREBASE E EXPORTA AS VARIÁVEIS GLOBAIS
-// Esta é a mudança crucial que conserta os erros de "não definido".
 firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const database = firebase.database();

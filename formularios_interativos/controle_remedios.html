@@ -145,60 +145,86 @@
             <div id="tab-tratamentos" class="tab-content">
                  <div class="bg-white rounded-2xl shadow-lg p-6 mb-6">
                     <h2 class="text-xl font-bold mb-4 text-indigo-700">Adicionar Novo Tratamento</h2>
-                    <input type="hidden" id="tratamento-id">
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                        <div>
-                            <label for="nome-remedio" class="block text-gray-700 font-bold mb-2">Nome do Remédio</label>
-                            <input type="text" id="nome-remedio" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="Ex: Paracetamol">
-                            <p id="error-nome-remedio" class="text-red-500 text-xs italic mt-1 hidden"></p>
+                    <form id="tratamento-form">
+                        <input type="hidden" id="tratamento-id">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                            <div>
+                                <label for="nome-remedio" class="block text-gray-700 font-bold mb-2">Nome do Remédio</label>
+                                <input type="text" id="nome-remedio" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="Ex: Paracetamol">
+                                <p id="error-nome-remedio" class="text-red-500 text-xs italic mt-1 hidden"></p>
+                            </div>
+                            <div>
+                                <label for="dosagem-remedio" class="block text-gray-700 font-bold mb-2">Dosagem</label>
+                                <input type="text" id="dosagem-remedio" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="Ex: 500mg">
+                                <p id="error-dosagem-remedio" class="text-red-500 text-xs italic mt-1 hidden"></p>
+                            </div>
                         </div>
-                        <div>
-                            <label for="dosagem-remedio" class="block text-gray-700 font-bold mb-2">Dosagem</label>
-                            <input type="text" id="dosagem-remedio" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="Ex: 500mg">
-                            <p id="error-dosagem-remedio" class="text-red-500 text-xs italic mt-1 hidden"></p>
-                        </div>
-                    </div>
-                    <div class="mb-4">
-                        <label for="tipo-tratamento" class="block text-gray-700 font-bold mb-2">Tipo de Tratamento</label>
-                        <select id="tipo-tratamento" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                            <option value="temporario">Temporário</option>
-                            <option value="continuo">Contínuo</option>
-                        </select>
-                    </div>
-                    <div id="duracao-container" class="mb-4" style="display: none;">
-                        <label for="duracao-tratamento" class="block text-gray-700 font-bold mb-2">Duração (dias)</label>
-                        <input type="number" id="duracao-tratamento" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="Ex: 7">
-                        <p id="error-duracao-tratamento" class="text-red-500 text-xs italic mt-1 hidden"></p>
-                    </div>
-                    <div class="mb-4">
-                        <label class="block text-gray-700 font-bold mb-2">Horários de Tomada</label>
-                        <div id="horarios-container" class="space-y-2 mb-2"></div>
-                        <button type="button" id="adicionar-horario-btn" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 transition flex items-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor">
-                                <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd" />
-                            </svg>
-                            Adicionar Horário
-                        </button>
-                        <p id="error-horarios" class="text-red-500 text-xs italic mt-1 hidden"></p>
-                    </div>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-                        <div>
-                            <label for="instrucoes-remedio" class="block text-gray-700 font-bold mb-2">Instruções</label>
-                            <select id="instrucoes-remedio" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                                <option value="antes">Antes das refeições</option>
-                                <option value="depois">Depois das refeições</option>
-                                <option value="personalizado">Personalizado</option>
+                        <div class="mb-4">
+                            <label for="tipo-tratamento" class="block text-gray-700 font-bold mb-2">Tipo de Tratamento</label>
+                            <select id="tipo-tratamento" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                                <option value="temporario">Temporário</option>
+                                <option value="continuo">Contínuo</option>
                             </select>
                         </div>
-                        <div id="instrucoes-personalizadas-container" style="display: none;">
-                            <label for="instrucoes-personalizadas" class="block text-gray-700 font-bold mb-2">Instruções Personalizadas</label>
-                            <input type="text" id="instrucoes-personalizadas" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="Ex: Tomar com água">
+                        <div id="duracao-container" class="mb-4">
+                            <label for="duracao-tratamento" class="block text-gray-700 font-bold mb-2">Duração (dias)</label>
+                            <input type="number" id="duracao-tratamento" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="Ex: 7">
+                            <p id="error-duracao-tratamento" class="text-red-500 text-xs italic mt-1 hidden"></p>
                         </div>
-                    </div>
-                    <div class="flex flex-col sm:flex-row gap-2">
-                        <button type="button" id="salvar-tratamento-btn" class="flex-1 py-3 bg-gradient-to-r from-green-500 to-teal-500 text-white font-bold rounded-lg shadow-md hover:from-green-600 hover:to-teal-600 transition transform hover:-translate-y-0.5">💾 Salvar Tratamento</button>
-                        <button type="button" id="cancelar-tratamento-btn" class="flex-1 py-3 bg-gray-500 text-white font-bold rounded-lg shadow-md hover:bg-gray-600 transition">↩️ Cancelar</button>
-                    </div>
+                        <div class="mb-4">
+                            <label for="tipo-horario" class="block text-gray-700 font-bold mb-2">Tipo de Horário</label>
+                            <select id="tipo-horario" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                                <option value="fixo">Horários Fixos</option>
+                                <option value="intervalo">Intervalo de Horas</option>
+                            </select>
+                        </div>
+                        
+                        <div id="horarios-fixos-container" class="mb-4">
+                            <label class="block text-gray-700 font-bold mb-2">Horários de Tomada</label>
+                            <div id="horarios-container" class="space-y-2 mb-2"></div>
+                            <button type="button" id="adicionar-horario-btn" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 transition flex items-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd" />
+                                </svg>
+                                Adicionar Horário
+                            </button>
+                            <p id="error-horarios" class="text-red-500 text-xs italic mt-1 hidden"></p>
+                        </div>
+
+                        <div id="horarios-intervalo-container" class="mb-4 hidden">
+                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                   <label for="horario-inicial" class="block text-gray-700 font-bold mb-2">Horário Inicial</label>
+                                   <input type="time" id="horario-inicial" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                                   <p id="error-horario-inicial" class="text-red-500 text-xs italic mt-1 hidden"></p>
+                                </div>
+                                 <div>
+                                   <label for="intervalo-horas" class="block text-gray-700 font-bold mb-2">Intervalo (em horas)</label>
+                                   <input type="number" id="intervalo-horas" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="Ex: 8">
+                                   <p id="error-intervalo-horas" class="text-red-500 text-xs italic mt-1 hidden"></p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                            <div>
+                                <label for="instrucoes-remedio" class="block text-gray-700 font-bold mb-2">Instruções</label>
+                                <select id="instrucoes-remedio" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                                    <option value="antes das refeições">Antes das refeições</option>
+                                    <option value="depois das refeições">Depois das refeições</option>
+                                    <option value="personalizado">Personalizado</option>
+                                </select>
+                            </div>
+                            <div id="instrucoes-personalizadas-container" style="display: none;">
+                                <label for="instrucoes-personalizadas" class="block text-gray-700 font-bold mb-2">Instruções Personalizadas</label>
+                                <input type="text" id="instrucoes-personalizadas" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="Ex: Tomar com água">
+                            </div>
+                        </div>
+                        <div class="flex flex-col sm:flex-row gap-2">
+                            <button type="button" id="salvar-tratamento-btn" class="flex-1 py-3 bg-gradient-to-r from-green-500 to-teal-500 text-white font-bold rounded-lg shadow-md hover:from-green-600 hover:to-teal-600 transition transform hover:-translate-y-0.5">💾 Salvar Tratamento</button>
+                            <button type="button" id="cancelar-tratamento-btn" class="flex-1 py-3 bg-gray-500 text-white font-bold rounded-lg shadow-md hover:bg-gray-600 transition">↩️ Cancelar</button>
+                        </div>
+                    </form>
                 </div>
                 <div id="tratamentos-lista" class="space-y-6"></div>
             </div>
@@ -329,12 +355,10 @@
             activePatientId: null,
             async init(uid) {
                 this.uid = uid;
-                // Ao iniciar, tenta carregar o paciente ativo salvo
                 this.activePatientId = await this.getActivePatientId();
             },
             _getBaseRef() {
                 if (!this.uid) return null;
-                // Caminho base ajustado para a estrutura do Firebase
                 return database.ref(`easy_lists/${this.uid}/enfermeiro_inteligente`);
             },
             async getActivePatientId() {
@@ -347,17 +371,14 @@
                  const ref = this._getBaseRef()?.child('active_patient_id');
                  if (!ref) return;
                  await ref.set(id);
-                 this.activePatientId = id; // Atualiza a variável local
+                 this.activePatientId = id;
             },
             async getUsers() {
-                // Busca os pacientes dentro do nó específico do usuário
                 const ref = this._getBaseRef()?.child('patients');
                 if (!ref) return [];
                 const snapshot = await ref.once('value');
                 const data = snapshot.val();
                 if (!data) return [];
-
-                // Converte o objeto de pacientes em um array
                 const users = [];
                 for (const id in data) {
                     users.push({ id, ...data[id] });
@@ -366,12 +387,11 @@
             },
             _getPatientDataRef() {
                  if (!this.uid || !this.activePatientId) return null;
-                 // Caminho para os dados específicos do paciente ativo
                  return database.ref(`easy_lists/${this.uid}/enfermeiro_inteligente/${this.activePatientId}`);
             },
             async _getData(path) {
                 const ref = this._getPatientDataRef()?.child(path);
-                if (!ref) return null; // Retorna null se não tiver paciente ativo
+                if (!ref) return null;
                 const snapshot = await ref.once('value');
                 return snapshot.val();
             },
@@ -379,17 +399,15 @@
                 const ref = this._getPatientDataRef()?.child(path);
                 if (!ref) {
                     console.error('Não é possível salvar dados sem um paciente ativo.');
-                    return false; // Falha ao salvar se não houver paciente
+                    return false;
                 }
                 await ref.set(data);
-                return true; // Sucesso ao salvar
+                return true;
             },
             async carregarTratamentos() {
-                // Carrega os tratamentos do paciente ativo
                 return await this._getData('tratamentos') || [];
             },
             async salvarTratamentos(tratamentos) {
-                // Salva os tratamentos do paciente ativo
                 return await this._saveData('tratamentos', tratamentos);
             },
             async carregarDoses() {
@@ -419,18 +437,16 @@
                 await ref.set(ativado);
             },
              async carregarNotificacoes() {
-                // Caminho ajustado para configurações do paciente ativo
                 return await this._getData('config/notificacoesAtivadas') || false;
             },
             async salvarNotificacoes(ativadas) {
-                 // Caminho ajustado para configurações do paciente ativo
                  const ref = this._getBaseRef()?.child('config/notificacoesAtivadas');
                  if (!ref) return;
                  await ref.set(ativadas);
             },
             async carregarAntecedencia() {
                  const val = await this._getData('config/antecedenciaNotificacao');
-                 return typeof val === 'number' ? val : 10; // Valor padrão 10 minutos
+                 return typeof val === 'number' ? val : 10;
             },
             async salvarAntecedencia(minutos) {
                  const ref = this._getBaseRef()?.child('config/antecedenciaNotificacao');
@@ -439,7 +455,6 @@
             }
         };
 
-
         // ========================================
         // GERENCIADOR DE TRATAMENTOS E DOSES
         // ========================================
@@ -447,96 +462,87 @@
             tratamentos: [],
             dosesDiarias: [],
             async init() {
-                // Inicializa carregando os tratamentos e doses do paciente ativo
                 this.tratamentos = await DataManager.carregarTratamentos();
                 this.dosesDiarias = await DataManager.carregarDoses();
             },
             async adicionarTratamento(dados) {
                 const novoTratamento = {
                     ...dados,
-                    id: Date.now().toString(), // Gera um ID único simples
-                    dataInicio: new Date().toISOString().split('T')[0] // Data de início
+                    id: Date.now().toString(),
+                    dataInicio: new Date().toISOString().split('T')[0]
                 };
                 this.tratamentos.push(novoTratamento);
-                // Salva no Firebase e regenera doses
                 if (await DataManager.salvarTratamentos(this.tratamentos)) {
-                    await this.gerarDosesParaHoje(); // Regenera doses após salvar
-                    await DataManager.marcarGeracaoHoje(); // Marca que as doses foram geradas hoje
+                    await this.gerarDosesParaHoje();
+                    await DataManager.marcarGeracaoHoje();
                     return true;
                 }
-                return false; // Falha ao salvar
+                return false;
             },
             async editarTratamento(id, dados) {
                 const index = this.tratamentos.findIndex(t => t.id === id);
-                if (index === -1) return false; // Tratamento não encontrado
+                if (index === -1) return false;
                 this.tratamentos[index] = { ...this.tratamentos[index], ...dados };
-                // Salva no Firebase e regenera doses
                 if (await DataManager.salvarTratamentos(this.tratamentos)) {
-                    await this.gerarDosesParaHoje(); // Regenera doses após salvar
+                    await this.gerarDosesParaHoje();
                     await DataManager.marcarGeracaoHoje();
                     return true;
                 }
-                return false; // Falha ao salvar
+                return false;
             },
             async excluirTratamento(id) {
                 this.tratamentos = this.tratamentos.filter(t => t.id !== id);
-                // Salva no Firebase e regenera doses
                 if (await DataManager.salvarTratamentos(this.tratamentos)) {
-                    await this.gerarDosesParaHoje(); // Regenera doses após excluir
+                    await this.gerarDosesParaHoje();
                     await DataManager.marcarGeracaoHoje();
                     return true;
                 }
-                return false; // Falha ao salvar
+                return false;
             },
             async gerarDosesParaHoje() {
                 const hoje = new Date().toISOString().split('T')[0];
                 const doses = [];
-
-                // Itera pelos tratamentos para gerar doses diárias
                 this.tratamentos.forEach(trat => {
-                    trat.horarios.forEach(horario => {
-                        doses.push({
-                            id: `${trat.id}_${horario}`, // ID único para a dose
-                            remedio: trat.nome,
-                            dosagem: trat.dosagem,
-                            horario: horario,
-                            status: 'pendente', // Status inicial
-                             hoje // Data associada
-                        });
-                    });
-                });
+                    const dataInicio = new Date(trat.dataInicio);
+                    const hojeDate = new Date(hoje);
+                    const diffTime = Math.abs(hojeDate - dataInicio);
+                    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
+                    if (trat.tipotratamento === 'continuo' || (diffDays < trat.duracao)) {
+                        trat.horarios.forEach(horario => {
+                            doses.push({
+                                id: `${trat.id}_${horario.replace(':', '')}`,
+                                remedio: trat.nome,
+                                dosagem: trat.dosagem,
+                                horario: horario,
+                                status: 'pendente',
+                                hoje
+                            });
+                        });
+                    }
+                });
                 this.dosesDiarias = doses;
-                // Salva as doses geradas no Firebase
                 await DataManager.salvarDoses(this.dosesDiarias);
             },
             obterEstatisticas() {
                 const total = this.tratamentos.length;
                 let ativos = 0;
                 let concluidos = 0;
-
                 const hoje = new Date();
-                hoje.setHours(0, 0, 0, 0); // Zera horas para comparar apenas datas
-
-                // Calcula estatísticas com base na data de início e duração
+                hoje.setHours(0, 0, 0, 0);
                 this.tratamentos.forEach(trat => {
                     const dataInicio = new Date(trat.dataInicio);
                     dataInicio.setHours(0, 0, 0, 0);
-                    const diffDays = Math.ceil((hoje - dataInicio) / 86400000); // Diferença em dias
-
-                    if (trat.tipotratamento === 'continuo') {
-                        ativos++; // Tratamentos contínuos sempre ativos
-                    } else if (diffDays >= 0 && diffDays < trat.duracao) {
-                        ativos++; // Tratamentos temporários dentro do prazo
+                    const diffDays = Math.ceil((hoje - dataInicio) / 86400000);
+                    if (trat.tipotratamento === 'continuo' || (diffDays >= 0 && diffDays < trat.duracao)) {
+                        ativos++;
                     } else if (diffDays >= trat.duracao) {
-                        concluidos++; // Tratamentos temporários concluídos
+                        concluidos++;
                     }
                 });
-
                 return { total, ativos, concluidos };
             }
         };
-
 
         // ========================================
         // INTERFACE DO USUÁRIO (UI)
@@ -551,12 +557,10 @@
                 else toast.classList.add('bg-blue-500');
                 toast.textContent = mensagem;
                 toastContainer.appendChild(toast);
-                // Animação de entrada
                 setTimeout(() => {
                     toast.classList.remove('opacity-0', 'translate-y-2');
                     toast.classList.add('opacity-100', 'translate-y-0');
                 }, 10);
-                // Auto remove após 3 segundos
                 setTimeout(() => {
                     toast.classList.remove('opacity-100', 'translate-y-0');
                     toast.classList.add('opacity-0', 'translate-y-2');
@@ -566,11 +570,13 @@
             validarCampo(campo, mensagemErro) {
                 const errorElement = document.getElementById(`error-${campo.id}`);
                 if (!campo.value.trim()) {
-                    if (errorElement) errorElement.textContent = mensagemErro;
+                    errorElement.textContent = mensagemErro;
+                    errorElement.classList.remove('hidden');
                     campo.classList.add('border-red-500');
                     return false;
                 } else {
-                    if (errorElement) errorElement.textContent = '';
+                    errorElement.textContent = '';
+                    errorElement.classList.add('hidden');
                     campo.classList.remove('border-red-500');
                     return true;
                 }
@@ -579,7 +585,6 @@
                 return data.toLocaleDateString('pt-BR');
             },
             aplicarDarkMode() {
-                 // Verifica e aplica o modo escuro salvo
                  DataManager.carregarDarkMode().then(ativado => {
                       if (ativado) {
                           document.body.classList.add('dark-mode');
@@ -589,47 +594,71 @@
             }
         };
 
-
         // ========================================
         // GERENCIADOR DE FORMULÁRIOS
         // ========================================
         const FormManager = {
             validarFormulario() {
                 let valido = true;
-                // Valida campos obrigatórios
-                if (!UI.validarCampo(document.getElementById('nome-remedio'), 'Informe o nome')) valido = false;
-                if (!UI.validarCampo(document.getElementById('dosagem-remedio'), 'Informe a dose')) valido = false;
+                valido = UI.validarCampo(document.getElementById('nome-remedio'), 'Informe o nome') && valido;
+                valido = UI.validarCampo(document.getElementById('dosagem-remedio'), 'Informe a dose') && valido;
+                
                 const tipoTratamento = document.getElementById('tipo-tratamento').value;
                 if (tipoTratamento === 'temporario') {
-                    const duracao = document.getElementById('duracao-tratamento');
-                    if (!UI.validarCampo(duracao, 'Informe a duração')) valido = false;
+                    valido = UI.validarCampo(document.getElementById('duracao-tratamento'), 'Informe a duração') && valido;
                 }
-                // Valida se há horários adicionados
-                const horarios = document.querySelectorAll('#horarios-container input[type="time"]');
-                if (horarios.length === 0) {
-                    document.getElementById('error-horarios').textContent = 'Adicione um horário';
-                    document.getElementById('error-horarios').classList.remove('hidden');
-                    valido = false;
-                } else {
-                    document.getElementById('error-horarios').classList.add('hidden');
+
+                const tipoHorario = document.getElementById('tipo-horario').value;
+                if (tipoHorario === 'fixo') {
+                    const horarios = document.querySelectorAll('#horarios-container input[type="time"]');
+                    if (horarios.length === 0) {
+                        document.getElementById('error-horarios').textContent = 'Adicione ao menos um horário';
+                        document.getElementById('error-horarios').classList.remove('hidden');
+                        valido = false;
+                    } else {
+                        document.getElementById('error-horarios').classList.add('hidden');
+                    }
+                } else { // 'intervalo'
+                    valido = UI.validarCampo(document.getElementById('horario-inicial'), 'Informe o horário inicial') && valido;
+                    valido = UI.validarCampo(document.getElementById('intervalo-horas'), 'Informe o intervalo') && valido;
                 }
                 return valido;
             },
             coletarDados() {
                  const tipo = document.getElementById('tipo-tratamento').value;
                  const instrucoesSelect = document.getElementById('instrucoes-remedio').value;
-                 // Determina as instruções com base na seleção
                  let instrucoes = instrucoesSelect === 'personalizado' ?
                      (document.getElementById('instrucoes-personalizadas').value.trim() || 'Conforme orientação') :
                      instrucoesSelect;
-                 // Coleta e ordena os horários
-                 const horarios = Array.from(document.querySelectorAll('#horarios-container input[type="time"]'))
-                     .map(i => i.value).filter(Boolean).sort();
+
+                 let horarios = [];
+                 const tipoHorario = document.getElementById('tipo-horario').value;
+                 if (tipoHorario === 'fixo') {
+                    horarios = Array.from(document.querySelectorAll('#horarios-container input[type="time"]'))
+                        .map(i => i.value).filter(Boolean).sort();
+                 } else { // 'intervalo'
+                    const horarioInicialStr = document.getElementById('horario-inicial').value;
+                    const intervalo = parseInt(document.getElementById('intervalo-horas').value, 10);
+                    if (horarioInicialStr && intervalo > 0) {
+                        const [startHour, startMinute] = horarioInicialStr.split(':').map(Number);
+                        let currentHour = startHour;
+                        let currentMinute = startMinute;
+
+                        while(currentHour < 24) {
+                            const formattedHour = String(currentHour).padStart(2, '0');
+                            const formattedMinute = String(currentMinute).padStart(2, '0');
+                            horarios.push(`${formattedHour}:${formattedMinute}`);
+                            
+                            currentHour += intervalo;
+                        }
+                    }
+                 }
+
                  return {
                      nome: document.getElementById('nome-remedio').value.trim(),
                      dosagem: document.getElementById('dosagem-remedio').value.trim(),
                      tipotratamento: tipo,
-                     duracao: tipo === 'temporario' ? parseInt(document.getElementById('duracao-tratamento').value) : null,
+                     duracao: tipo === 'temporario' ? parseInt(document.getElementById('duracao-tratamento').value, 10) : null,
                      horarios,
                      instrucoes
                  };
@@ -637,20 +666,20 @@
             editarTratamento(id) {
                  const tratamento = TreatmentManager.tratamentos.find(t => t.id === id);
                  if (!tratamento) return;
-                 // Preenche o formulário com os dados do tratamento
+                 
+                 this.resetarFormulario();
+                 
                  document.getElementById('tratamento-id').value = tratamento.id;
                  document.getElementById('nome-remedio').value = tratamento.nome;
                  document.getElementById('dosagem-remedio').value = tratamento.dosagem;
                  document.getElementById('tipo-tratamento').value = tratamento.tipotratamento;
-                 // Mostra/esconde campo de duração
-                 const duracaoContainer = document.getElementById('duracao-container');
-                 duracaoContainer.style.display = tratamento.tipotratamento === 'temporario' ? 'block' : 'none';
+                 
+                 document.getElementById('duracao-container').style.display = tratamento.tipotratamento === 'temporario' ? 'block' : 'none';
                  if (tratamento.duracao) {
                      document.getElementById('duracao-tratamento').value = tratamento.duracao;
                  }
-                 // Recria os campos de horário
+                 
                  const horariosContainer = document.getElementById('horarios-container');
-                 horariosContainer.innerHTML = '';
                  tratamento.horarios.forEach(horario => {
                      const input = document.createElement('input');
                      input.type = 'time';
@@ -658,105 +687,69 @@
                      input.value = horario;
                      horariosContainer.appendChild(input);
                  });
-                 // Seleciona a instrução e mostra campo personalizado se necessário
-                 document.getElementById('instrucoes-remedio').value = ['antes', 'depois'].includes(tratamento.instrucoes) ? tratamento.instrucoes : 'personalizado';
+                 
+                 document.getElementById('instrucoes-remedio').value = ['antes das refeições', 'depois das refeições'].includes(tratamento.instrucoes) ? tratamento.instrucoes : 'personalizado';
                  const instrucoesPersContainer = document.getElementById('instrucoes-personalizadas-container');
-                 instrucoesPersContainer.style.display = ['antes', 'depois'].includes(tratamento.instrucoes) ? 'none' : 'block';
-                 if (!['antes', 'depois'].includes(tratamento.instrucoes)) {
+                 instrucoesPersContainer.style.display = ['antes das refeições', 'depois das refeições'].includes(tratamento.instrucoes) ? 'none' : 'block';
+                 if (!['antes das refeições', 'depois das refeições'].includes(tratamento.instrucoes)) {
                      document.getElementById('instrucoes-personalizadas').value = tratamento.instrucoes;
                  }
-                 // Alterna para a aba de tratamentos
+                 
                  document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
                  document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
                  document.getElementById('btn-tab-tratamentos').classList.add('active');
                  document.getElementById('tab-tratamentos').classList.add('active');
             },
             excluirTratamento(id) {
-                 // Confirma antes de excluir
                  if (!confirm('Tem certeza que deseja excluir este tratamento?')) return;
                  TreatmentManager.excluirTratamento(id).then(sucesso => {
                      if (sucesso) {
-                         Renderer.renderApp(); // Re-renderiza a app
+                         Renderer.renderTratamentos();
                          UI.mostrarToast('Tratamento excluído com sucesso!', 'success');
                      } else {
                          UI.mostrarToast('Erro ao excluir o tratamento.', 'error');
                      }
                  });
+            },
+            resetarFormulario() {
+                document.getElementById('tratamento-form').reset();
+                document.getElementById('tratamento-id').value = '';
+                document.getElementById('horarios-container').innerHTML = '';
+                document.getElementById('duracao-container').style.display = 'block';
+                document.getElementById('horarios-fixos-container').style.display = 'block';
+                document.getElementById('horarios-intervalo-container').classList.add('hidden');
+                document.getElementById('instrucoes-personalizadas-container').style.display = 'none';
             }
         };
-
-
-        // ========================================
-        // GERENCIADOR DE EXPORTAÇÃO
-        // ========================================
-        const ExportManager = {
-            async exportarCSV() {
-                if (TreatmentManager.tratamentos.length === 0) {
-                    UI.mostrarToast('Nenhum tratamento para exportar', 'error');
-                    return;
-                }
-                // Obtém o nome do paciente ativo para o nome do arquivo
-                const users = await DataManager.getUsers();
-                const activeUserId = DataManager.activePatientId;
-                const activeUser = users.find(u => u.id === activeUserId);
-                const userName = activeUser ? activeUser.name.replace(/\s/g, '_') : 'Paciente';
-
-                let csv = 'Nome,Dosagem,Tipo,Duração (dias),Horários,Instruções,Data de Início';
-                TreatmentManager.tratamentos.forEach(trat => {
-                    const tipo = trat.tipotratamento === 'continuo' ? 'Contínuo' : 'Temporário';
-                    const duracao = trat.tipotratamento === 'continuo' ? 'N/A' : trat.duracao;
-                    // Formata os horários como string separada por '; '
-                    const horarios = `"${trat.horarios.join('; ')}"`;
-                    const dataInicio = new Date(trat.dataInicio).toLocaleDateString('pt-BR');
-                    // Adiciona linha ao CSV
-                    csv += `\n"${trat.nome}","${trat.dosagem}","${tipo}","${duracao}","${horarios}","${trat.instrucoes}","${dataInicio}"`;
-                });
-
-                // Cria e faz o download do arquivo CSV
-                const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-                const link = document.createElement('a');
-                const url = URL.createObjectURL(blob);
-                link.setAttribute('href', url);
-                link.setAttribute('download', `Tratamentos_${userName}.csv`);
-                link.style.visibility = 'hidden';
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
-            }
-        };
-
 
         // ========================================
         // RENDERIZADOR DA INTERFACE
         // ========================================
         const Renderer = {
             async renderApp() {
-                 // Verifica se há um paciente ativo
                  if (DataManager.activePatientId) {
                      document.getElementById('main-controls').style.display = 'flex';
                      document.getElementById('footer-progress').style.display = 'block';
                      document.getElementById('placeholder').style.display = 'none';
                      document.getElementById('checklist-container').style.display = 'block';
-                     // Inicializa o gerenciador de tratamentos
                      await TreatmentManager.init();
-                     this.renderDosesDiarias(); // Renderiza o checklist
+                     this.renderDosesDiarias();
                  } else {
-                     // Se não houver paciente, limpa e mostra placeholder
                      document.getElementById('checklist-container').innerHTML = '';
                      document.getElementById('main-controls').style.display = 'none';
                      document.getElementById('footer-progress').style.display = 'none';
                      document.getElementById('placeholder').style.display = 'block';
                      document.getElementById('checklist-container').style.display = 'none';
                  }
-                 this.atualizarBarraProgresso(); // Atualiza a barra de progresso
+                 this.atualizarBarraProgresso();
             },
             renderPacientes(users) {
                  const container = document.getElementById('pacientes-lista');
-                 container.innerHTML = ''; // Limpa o container
-                 // Renderiza cada paciente
+                 container.innerHTML = '';
                  users.forEach(user => {
                      const card = document.createElement('div');
-                     card.className = 'bg-white rounded-2xl shadow-lg overflow-hidden';
+                     const isActive = user.id === DataManager.activePatientId;
+                     card.className = `bg-white rounded-2xl shadow-lg overflow-hidden border-2 ${isActive ? 'border-indigo-500' : 'border-transparent'}`;
                      card.innerHTML = `
                          <div class="p-6">
                              <div class="flex justify-between items-start">
@@ -764,7 +757,9 @@
                                      <h3 class="text-xl font-bold text-gray-800">${user.name}</h3>
                                      <p class="text-gray-600 text-sm mt-1">ID: ${user.id}</p>
                                  </div>
-                                 <button onclick="UserManager.selecionarPaciente('${user.id}')" class="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition text-sm font-medium">Selecionar</button>
+                                 <button onclick="UserManager.selecionarPaciente('${user.id}')" class="px-4 py-2 ${isActive ? 'bg-green-600' : 'bg-indigo-600'} text-white rounded-lg hover:bg-indigo-700 transition text-sm font-medium">
+                                    ${isActive ? 'Selecionado ✓' : 'Selecionar'}
+                                 </button>
                              </div>
                          </div>
                      `;
@@ -773,12 +768,10 @@
             },
             renderTratamentos() {
                 const container = document.getElementById('tratamentos-lista');
-                container.innerHTML = ''; // Limpa o container
-                // Renderiza cada tratamento
+                container.innerHTML = '';
                 TreatmentManager.tratamentos.forEach(trat => {
                     const card = document.createElement('div');
                     card.className = 'bg-white rounded-2xl shadow-lg overflow-hidden';
-                    // Determina o texto da duração
                     const duracaoTexto = trat.tipotratamento === 'continuo' ? 'Contínuo' : `${trat.duracao} dias`;
                     card.innerHTML = `
                         <div class="p-6">
@@ -791,14 +784,10 @@
                                 </div>
                                 <div class="flex space-x-2">
                                     <button onclick="FormManager.editarTratamento('${trat.id}')" class="p-2 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 transition" title="Editar">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                                            <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
-                                        </svg>
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" /></svg>
                                     </button>
                                     <button onclick="FormManager.excluirTratamento('${trat.id}')" class="p-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition" title="Excluir">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                                            <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
-                                        </svg>
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" /></svg>
                                     </button>
                                 </div>
                             </div>
@@ -809,71 +798,63 @@
             },
             renderDosesDiarias() {
                 const container = document.getElementById('checklist-container');
-                container.innerHTML = ''; // Limpa o container
+                container.innerHTML = '';
 
-                // Agrupa as doses por período do dia
-                const groupedMeds = {
-                    'Manhã ☀️': [],
-                    'Tarde 🌇': [],
-                    'Noite 🌙': []
-                };
-
-                // Classifica as doses por horário e agrupa
+                const groupedMeds = { 'Manhã ☀️': [], 'Tarde 🌇': [], 'Noite 🌙': [] };
                 TreatmentManager.dosesDiarias
                     .sort((a, b) => a.horario.localeCompare(b.horario))
                     .forEach(dose => {
                         const hour = parseInt(dose.horario.split(':')[0], 10);
-                        if (hour >= 4 && hour < 12) {
-                            groupedMeds['Manhã ☀️'].push(dose);
-                        } else if (hour >= 12 && hour < 18) {
-                            groupedMeds['Tarde 🌇'].push(dose);
-                        } else {
-                            groupedMeds['Noite 🌙'].push(dose);
-                        }
+                        if (hour >= 4 && hour < 12) groupedMeds['Manhã ☀️'].push(dose);
+                        else if (hour >= 12 && hour < 18) groupedMeds['Tarde 🌇'].push(dose);
+                        else groupedMeds['Noite 🌙'].push(dose);
                     });
 
-                // Renderiza cada período
                 for (const periodo in groupedMeds) {
                     if (groupedMeds[periodo].length > 0) {
                         const periodCard = document.createElement('div');
                         periodCard.className = 'bg-white rounded-2xl shadow-lg overflow-hidden';
-                        periodCard.innerHTML = `
-                            <div class="bg-gray-50 p-4 border-b border-gray-200">
-                                <h2 class="text-lg font-bold text-gray-800">${periodo}</h2>
-                            </div>
-                            <div class="p-4">
-                        `;
-                        // Renderiza cada dose dentro do período
+                        let dosesHtml = '';
+                        
                         groupedMeds[periodo].forEach(dose => {
-                            const doseCard = document.createElement('div');
-                            doseCard.className = 'p-3 border border-gray-200 rounded-lg mb-3 bg-gray-50';
-                            doseCard.innerHTML = `
-                                <div class="flex justify-between items-center">
-                                    <div>
-                                        <p class="font-semibold text-gray-800">${dose.remedio}</p>
-                                        <p class="text-gray-600 text-sm">${dose.dosagem}</p>
-                                        <p class="text-gray-500 text-xs mt-1">${dose.horario}</p>
+                            let buttonHtml = '';
+                            if (dose.status === 'tomada') {
+                                buttonHtml = `<button class="px-3 py-1 bg-gray-400 text-white rounded-lg text-sm font-medium cursor-not-allowed" disabled>Tomado ✓</button>`;
+                            } else {
+                                buttonHtml = `<button onclick="Renderer.marcarDose('${dose.id}')" class="px-3 py-1 bg-green-500 text-white rounded-lg hover:bg-green-600 transition text-sm font-medium">Tomada</button>`;
+                            }
+
+                            dosesHtml += `
+                                <div class="p-3 border-t border-gray-200">
+                                    <div class="flex justify-between items-center">
+                                        <div>
+                                            <p class="font-semibold text-gray-800">${dose.remedio}</p>
+                                            <p class="text-gray-600 text-sm">${dose.dosagem}</p>
+                                            <p class="text-gray-500 text-xs mt-1">${dose.horario}</p>
+                                        </div>
+                                        ${buttonHtml}
                                     </div>
-                                    <button onclick="Renderer.marcarDose('${dose.id}')" class="px-3 py-1 bg-green-500 text-white rounded-lg hover:bg-green-600 transition text-sm font-medium">
-                                        Tomada
-                                    </button>
                                 </div>
                             `;
-                            periodCard.appendChild(doseCard);
                         });
-                        periodCard.innerHTML += '</div></div>';
+
+                        periodCard.innerHTML = `
+                            <div class="bg-gray-50 p-4">
+                                <h2 class="text-lg font-bold text-gray-800">${periodo}</h2>
+                            </div>
+                            ${dosesHtml}
+                        `;
                         container.appendChild(periodCard);
                     }
                 }
-                this.atualizarBarraProgresso(); // Atualiza a barra após renderizar
+                this.atualizarBarraProgresso();
             },
             marcarDose(id) {
-                // Encontra a dose e marca como 'tomada'
-                const dose = TreatmentManager.dosesDiarias.find(d => d.id === id);
-                if (dose) {
-                    dose.status = 'tomada';
+                const doseIndex = TreatmentManager.dosesDiarias.findIndex(d => d.id === id);
+                if (doseIndex > -1) {
+                    TreatmentManager.dosesDiarias[doseIndex].status = 'tomada';
                     DataManager.salvarDoses(TreatmentManager.dosesDiarias).then(() => {
-                        this.renderDosesDiarias(); // Re-renderiza o checklist
+                        this.renderDosesDiarias();
                         UI.mostrarToast('Dose marcada como tomada!', 'success');
                     });
                 }
@@ -882,12 +863,10 @@
                 const total = TreatmentManager.dosesDiarias.length;
                 const tomadas = TreatmentManager.dosesDiarias.filter(d => d.status === 'tomada').length;
                 const percentual = total > 0 ? Math.round((tomadas / total) * 100) : 0;
-
                 document.getElementById('progress-text').textContent = `${percentual}%`;
                 document.getElementById('progress-bar').style.width = `${percentual}%`;
             }
         };
-
 
         // ========================================
         // GERENCIADOR DE NOTIFICAÇÕES
@@ -907,58 +886,40 @@
             enviarNotificacao(titulo, corpo) {
                 if (Notification.permission !== 'granted') return;
                 try {
-                    // Tenta enviar a notificação
-                    const notification = new Notification(titulo, {
-                        body: corpo,
-                        icon: 'favicon.ico' // Substitua pelo caminho correto do seu favicon
-                    });
+                    const notification = new Notification(titulo, { body: corpo, icon: '../favicon.ico' });
                 } catch (err) {
                     console.error('Erro ao enviar notificação:', err);
                 }
             },
             async verificarDoses() {
-                 // Verifica se as notificações estão ativadas
                  const notificacoesAtivadas = await DataManager.carregarNotificacoes();
                  if (!notificacoesAtivadas) return;
 
                  const agora = new Date();
                  const horaAtual = agora.getHours();
                  const minutoAtual = agora.getMinutes();
-                 // Carrega a antecedência configurada
                  const antecedencia = await DataManager.carregarAntecedencia();
 
-                 // Verifica cada dose pendente
                  for (const dose of TreatmentManager.dosesDiarias) {
-                     if (dose.status !== 'pendente') continue; // Pula doses já tomadas
+                     if (dose.status !== 'pendente' || dose.notified) continue;
 
                      const [horaDose, minutoDose] = dose.horario.split(':').map(Number);
                      const diferencaMinutos = (horaDose * 60 + minutoDose) - (horaAtual * 60 + minutoAtual);
 
-                     // Se a dose está dentro da janela de antecedência, envia notificação
                      if (diferencaMinutos > 0 && diferencaMinutos <= antecedencia) {
-                         this.enviarNotificacao(
-                             `💊 Hora do Remédio: ${dose.remedio}`,
-                             `É hora de tomar ${dose.dosagem} de ${dose.remedio} às ${dose.horario}.`
-                         );
-                         // Marca a dose como notificada para evitar repetições
+                         this.enviarNotificacao(`💊 Hora do Remédio: ${dose.remedio}`, `É hora de tomar ${dose.dosagem} de ${dose.remedio} às ${dose.horario}.`);
                          dose.notified = true;
-                         await DataManager.salvarDoses(TreatmentManager.dosesDiarias);
                      }
                  }
             },
             iniciarVerificacao() {
-                 // Inicia a verificação periódica a cada minuto
-                 this.intervalId = setInterval(() => {
-                     this.verificarDoses();
-                 }, 60 * 1000); // 60 segundos
-                 this.verificarDoses(); // Executa uma verificação imediata ao iniciar
+                 this.pararVerificacao();
+                 this.intervalId = setInterval(() => this.verificarDoses(), 60000);
+                 this.verificarDoses();
             },
             pararVerificacao() {
-                 // Limpa o intervalo de verificação
-                 if (this.intervalId) {
-                     clearInterval(this.intervalId);
-                     this.intervalId = null;
-                 }
+                 if (this.intervalId) clearInterval(this.intervalId);
+                 this.intervalId = null;
             }
         };
 
@@ -969,73 +930,65 @@
         const UserManager = {
              async carregarPacientes() {
                  const users = await DataManager.getUsers();
-                 Renderer.renderPacientes(users); // Renderiza a lista de pacientes
+                 Renderer.renderPacientes(users);
              },
              async selecionarPaciente(id) {
-                  await DataManager.setActivePatientId(id); // Define o paciente ativo
-                  await Renderer.renderApp(); // Re-renderiza a app com o novo paciente
+                  await DataManager.setActivePatientId(id);
+                  await UserManager.carregarPacientes();
+                  await Renderer.renderApp();
+                  await TreatmentManager.init();
+                  Renderer.renderTratamentos();
                   UI.mostrarToast('Paciente selecionado com sucesso!', 'success');
              }
         };
-
 
         // ========================================
         // INICIALIZAÇÃO E EVENT LISTENERS GLOBAIS
         // ========================================
         document.addEventListener('DOMContentLoaded', () => {
-             // Listener para mudanças no estado de autenticação
              auth.onAuthStateChanged(async (user) => {
                  if (user) {
-                     // Verifica se o usuário está bloqueado antes de prosseguir
                      const userRef = database.ref(`users_public_list/${user.uid}`);
                      const snapshot = await userRef.once('value');
                      const userData = snapshot.val();
                      if (userData && userData.isBlocked) {
-                         // Usuário bloqueado: mostra tela de acesso negado
                          document.getElementById('auth-container').style.display = 'flex';
                          document.getElementById('app-container').style.display = 'none';
                          document.querySelector('#auth-container p').textContent = 'Sua conta está bloqueada. Contate o administrador.';
-                         return; // Interrompe a inicialização
+                         return;
                      }
 
-                     // Usuário válido: inicializa a app
                      document.getElementById('auth-container').style.display = 'none';
                      document.getElementById('app-container').style.display = 'block';
                      document.getElementById('user-email').textContent = user.email;
 
-                     // Inicializa o DataManager com o UID do usuário
                      await DataManager.init(user.uid);
-                     await UI.aplicarDarkMode(); // Aplica o modo escuro salvo
-                     await UserManager.carregarPacientes(); // Carrega a lista de pacientes
+                     await UI.aplicarDarkMode();
+                     await UserManager.carregarPacientes();
+                     await Renderer.renderApp();
+                     await TreatmentManager.init();
+                     Renderer.renderTratamentos();
 
-                     // Verifica e inicia notificações se estiverem ativadas
                      const notificacoesAtivadas = await DataManager.carregarNotificacoes();
                      if (notificacoesAtivadas) {
-                         const permitido = await NotificationManager.solicitarPermissao();
-                         if (permitido) {
+                         if (await NotificationManager.solicitarPermissao()) {
                              NotificationManager.iniciarVerificacao();
                          }
                      }
                      document.getElementById('current-date').textContent = UI.formatarData(new Date());
                  } else {
-                     // Usuário não autenticado: mostra tela de acesso negado
                      document.getElementById('app-container').style.display = 'none';
                      document.getElementById('auth-container').style.display = 'flex';
                  }
              });
 
-             // Logout
-             document.getElementById('logout-btn').addEventListener('click', () => {
-                 auth.signOut();
-             });
+             document.getElementById('logout-btn').addEventListener('click', () => auth.signOut());
 
             // --- Navegação por Abas ---
             document.querySelectorAll('.tab-btn').forEach(button => {
                 button.addEventListener('click', () => {
-                    // Remove classe 'active' de todos os botões e conteúdos
                     document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
                     document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
-                    // Adiciona classe 'active' ao botão clicado e à aba correspondente
                     button.classList.add('active');
                     document.getElementById(`tab-${button.dataset.tab}`).classList.add('active');
                 });
@@ -1049,30 +1002,31 @@
                      UI.mostrarToast('Por favor, informe o nome do paciente.', 'error');
                      return;
                  }
-                 // Gera um ID único para o novo paciente
                  const novoId = `paciente_${Date.now()}`;
-                 const novoPaciente = {
-                     id: novoId,
-                     name: nome
-                 };
-                 // Salva o novo paciente no Firebase
                  const ref = database.ref(`easy_lists/${DataManager.uid}/enfermeiro_inteligente/patients/${novoId}`);
-                 await ref.set(novoPaciente);
-                 nomeInput.value = ''; // Limpa o campo de input
-                 await UserManager.carregarPacientes(); // Recarrega a lista
+                 await ref.set({ id: novoId, name: nome });
+                 nomeInput.value = '';
+                 await UserManager.carregarPacientes();
                  UI.mostrarToast('Paciente criado com sucesso!', 'success');
             });
-
-            // --- Aba Tratamentos ---
+            
+            // --- Aba Tratamentos (Lógica do Formulário) ---
             document.getElementById('tipo-tratamento').addEventListener('change', function() {
-                const duracaoContainer = document.getElementById('duracao-container');
-                // Mostra/esconde o campo de duração com base no tipo de tratamento
-                duracaoContainer.style.display = this.value === 'temporario' ? 'block' : 'none';
+                document.getElementById('duracao-container').style.display = this.value === 'temporario' ? 'block' : 'none';
+            });
+
+            document.getElementById('tipo-horario').addEventListener('change', function() {
+                if (this.value === 'fixo') {
+                    document.getElementById('horarios-fixos-container').style.display = 'block';
+                    document.getElementById('horarios-intervalo-container').classList.add('hidden');
+                } else {
+                    document.getElementById('horarios-fixos-container').style.display = 'none';
+                    document.getElementById('horarios-intervalo-container').classList.remove('hidden');
+                }
             });
 
             document.getElementById('adicionar-horario-btn').addEventListener('click', () => {
                 const container = document.getElementById('horarios-container');
-                // Adiciona um novo campo de input para horário
                 const input = document.createElement('input');
                 input.type = 'time';
                 input.className = 'w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500';
@@ -1080,57 +1034,34 @@
             });
 
             document.getElementById('instrucoes-remedio').addEventListener('change', function() {
-                const container = document.getElementById('instrucoes-personalizadas-container');
-                // Mostra/esconde o campo de instruções personalizadas
-                container.style.display = this.value === 'personalizado' ? 'block' : 'none';
+                document.getElementById('instrucoes-personalizadas-container').style.display = this.value === 'personalizado' ? 'block' : 'none';
             });
-
+            
             document.getElementById('salvar-tratamento-btn').addEventListener('click', async (e) => {
-                e.preventDefault(); // Previne o comportamento padrão do formulário
+                e.preventDefault();
+                if (!DataManager.activePatientId) {
+                    UI.mostrarToast('Selecione um paciente antes de salvar um tratamento.', 'error');
+                    return;
+                }
                 if (!FormManager.validarFormulario()) {
                     UI.mostrarToast('Preencha os campos obrigatórios.', 'error');
                     return;
                 }
                 const id = document.getElementById('tratamento-id').value;
                 const dados = FormManager.coletarDados();
-                let sucesso;
-                // Adiciona ou edita o tratamento com base na presença do ID
-                if (id) {
-                    sucesso = await TreatmentManager.editarTratamento(id, dados);
-                } else {
-                    sucesso = await TreatmentManager.adicionarTratamento(dados);
-                }
+                const sucesso = id ? await TreatmentManager.editarTratamento(id, dados) : await TreatmentManager.adicionarTratamento(dados);
+                
                 if (sucesso) {
-                    await Renderer.renderApp(); // Re-renderiza a app
-                    // Limpa o formulário
-                    document.getElementById('tratamento-id').value = '';
-                    document.getElementById('nome-remedio').value = '';
-                    document.getElementById('dosagem-remedio').value = '';
-                    document.getElementById('tipo-tratamento').value = 'temporario';
-                    document.getElementById('duracao-container').style.display = 'none';
-                    document.getElementById('duracao-tratamento').value = '';
-                    document.getElementById('horarios-container').innerHTML = '';
-                    document.getElementById('instrucoes-remedio').value = 'antes';
-                    document.getElementById('instrucoes-personalizadas-container').style.display = 'none';
-                    document.getElementById('instrucoes-personalizadas').value = '';
+                    Renderer.renderTratamentos();
+                    FormManager.resetarFormulario();
                     UI.mostrarToast('Tratamento salvo com sucesso!', 'success');
                 } else {
                     UI.mostrarToast('Erro ao salvar o tratamento.', 'error');
                 }
             });
-
+            
             document.getElementById('cancelar-tratamento-btn').addEventListener('click', () => {
-                 // Limpa o formulário ao cancelar
-                 document.getElementById('tratamento-id').value = '';
-                 document.getElementById('nome-remedio').value = '';
-                 document.getElementById('dosagem-remedio').value = '';
-                 document.getElementById('tipo-tratamento').value = 'temporario';
-                 document.getElementById('duracao-container').style.display = 'none';
-                 document.getElementById('duracao-tratamento').value = '';
-                 document.getElementById('horarios-container').innerHTML = '';
-                 document.getElementById('instrucoes-remedio').value = 'antes';
-                 document.getElementById('instrucoes-personalizadas-container').style.display = 'none';
-                 document.getElementById('instrucoes-personalizadas').value = '';
+                 FormManager.resetarFormulario();
             });
 
             // --- Aba Relatórios ---
@@ -1143,7 +1074,6 @@
                  const button = document.getElementById('toggle-dark-mode');
                  const span = button.querySelector('span');
                  const estaAtivado = document.body.classList.contains('dark-mode');
-                 // Alterna o estado do modo escuro
                  document.body.classList.toggle('dark-mode');
                  if (estaAtivado) {
                      span.style.transform = 'translateX(0.25rem)';
@@ -1157,7 +1087,6 @@
             document.getElementById('toggle-notifications').addEventListener('click', async function() {
                  const estaAtivado = this.dataset.enabled === 'true';
                  if (!estaAtivado) {
-                     // Solicita permissão ao ativar notificações
                      const permitido = await NotificationManager.solicitarPermissao();
                      if (permitido) {
                          this.dataset.enabled = 'true';
@@ -1165,31 +1094,28 @@
                          this.querySelector('span').style.transform = 'translateX(1.5rem)';
                          document.getElementById('notification-settings').classList.remove('hidden');
                          await DataManager.salvarNotificacoes(true);
-                         NotificationManager.iniciarVerificacao(); // Inicia a verificação
+                         NotificationManager.iniciarVerificacao();
                          UI.mostrarToast('Notificações ativadas!', 'success');
                      } else {
                          UI.mostrarToast('Permissão não concedida.', 'error');
                      }
                  } else {
-                     // Desativa notificações
                      this.dataset.enabled = 'false';
                      this.classList.remove('bg-blue-600');
                      this.querySelector('span').style.transform = 'translateX(0.25rem)';
                      document.getElementById('notification-settings').classList.add('hidden');
                      await DataManager.salvarNotificacoes(false);
-                     NotificationManager.pararVerificacao(); // Para a verificação
+                     NotificationManager.pararVerificacao();
                      UI.mostrarToast('Notificações desativadas.', 'info');
                  }
             });
 
             document.getElementById('select-antecedencia').addEventListener('change', async function() {
-                 // Salva a nova antecedência selecionada
                  await DataManager.salvarAntecedencia(parseInt(this.value));
                  UI.mostrarToast('Antecedência atualizada.', 'info');
             });
 
             document.getElementById('btn-testar-notificacao').addEventListener('click', () => {
-                 // Testa o envio de notificação se permitido
                  if (Notification.permission === 'granted') {
                      NotificationManager.enviarNotificacao('💊 Teste', 'Notificações estão funcionando!');
                  } else {
@@ -1203,51 +1129,45 @@
                      UI.mostrarToast('Nenhum paciente selecionado.', 'error');
                      return;
                  }
-                 // Verifica se há doses antes de finalizar
                  if (TreatmentManager.dosesDiarias.length === 0) {
                      UI.mostrarToast('Nenhuma dose registrada para hoje.', 'info');
                      return;
                  }
-                 const confirmacao = confirm("Tem certeza que deseja finalizar o dia? Isso marcará todas as doses restantes como 'não tomadas'.");
-                 if (confirmacao) {
-                     // Marca todas as doses pendentes como 'não tomadas'
+                 if (confirm("Tem certeza? Isso marcará as doses restantes como 'não tomadas'.")) {
                      TreatmentManager.dosesDiarias.forEach(dose => {
                          if (dose.status === 'pendente') {
                              dose.status = 'nao_tomada';
                          }
                      });
                      await DataManager.salvarDoses(TreatmentManager.dosesDiarias);
-                     await Renderer.renderApp(); // Re-renderiza
-                     UI.mostrarToast('Dia finalizado. Doses restantes marcadas como \'não tomadas\'.', 'success');
+                     await Renderer.renderApp();
+                     UI.mostrarToast('Dia finalizado.', 'success');
                  }
             });
 
-            document.getElementById('btn-gerar-relatorio').addEventListener('click', () => {
+            document.getElementById('btn-gerar-relatorio').addEventListener('click', async () => {
                  if (!DataManager.activePatientId) {
                      UI.mostrarToast('Nenhum paciente selecionado.', 'error');
                      return;
                  }
-                 // Verifica se há dados para gerar o relatório
                  if (TreatmentManager.tratamentos.length === 0 && TreatmentManager.dosesDiarias.length === 0) {
                      UI.mostrarToast('Nenhum dado para gerar relatório.', 'info');
                      return;
                  }
+                 
                  let reportText = `RELATÓRIO DE TRATAMENTO\n========================\n\n`;
-                 const users = DataManager.getUsers();
-                 const activeUserId = DataManager.activePatientId;
-                 const activeUser = users.find(u => u.id === activeUserId);
+                 const users = await DataManager.getUsers(); // Precisa ser await
+                 const activeUser = users.find(u => u.id === DataManager.activePatientId);
                  const userName = activeUser ? activeUser.name : 'Paciente Desconhecido';
                  reportText += `Paciente: ${userName}\n`;
                  reportText += `Data: ${new Date().toLocaleString('pt-BR')}\n\n`;
 
-                 // Adiciona estatísticas ao relatório
                  const stats = TreatmentManager.obterEstatisticas();
                  reportText += `--- ESTATÍSTICAS ---\n`;
                  reportText += `Total de Tratamentos: ${stats.total}\n`;
                  reportText += `Tratamentos Ativos: ${stats.ativos}\n`;
                  reportText += `Tratamentos Concluídos: ${stats.concluidos}\n\n`;
 
-                 // Adiciona lista de tratamentos
                  reportText += `--- TRATAMENTOS CADASTRADOS (${TreatmentManager.tratamentos.length}) ---\n`;
                  if (TreatmentManager.tratamentos.length === 0) {
                      reportText += `Nenhum tratamento cadastrado.\n\n`;
@@ -1262,7 +1182,6 @@
                      });
                  }
 
-                 // Adiciona doses de hoje
                  reportText += `--- DOSES DE HOJE (${TreatmentManager.dosesDiarias.length}) ---\n`;
                  if (TreatmentManager.dosesDiarias.length === 0) {
                      reportText += `Nenhuma dose programada para hoje.\n`;
@@ -1279,23 +1198,19 @@
                      reportText += `Não Tomadas: ${statusCounts.nao_tomada}\n`;
                  }
 
-                 // Exibe o relatório em um modal
-                 const modalBody = document.getElementById('modal-body');
-                 modalBody.innerHTML = `<pre class="whitespace-pre-wrap">${reportText}</pre>`;
+                 document.getElementById('modal-body').innerHTML = `<pre class="whitespace-pre-wrap">${reportText}</pre>`;
                  document.getElementById('modal-title').textContent = 'Relatório de Tratamento';
                  document.getElementById('modal-actions').innerHTML = `
                      <button id="btn-copy-report" class="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition">Copiar</button>
-                     <button id="btn-close-modal" class="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition">Fechar</button>
+                     <button id="btn-close-modal-report" class="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition">Fechar</button>
                  `;
                  document.getElementById('modal-overlay').classList.remove('hidden');
 
-                 // Adiciona listener para o botão de copiar
                  document.getElementById('btn-copy-report').onclick = () => {
                      navigator.clipboard.writeText(reportText).then(() => {
-                         UI.mostrarToast('Relatório copiado para a área de transferência!', 'success');
-                     }, (err) => {
-                         console.error('Erro ao copiar: ', err);
-                         UI.mostrarToast('Falha ao copiar o relatório.', 'error');
+                         UI.mostrarToast('Relatório copiado!', 'success');
+                     }, () => {
+                         UI.mostrarToast('Falha ao copiar.', 'error');
                      });
                  };
             });
@@ -1309,13 +1224,11 @@
                     document.getElementById('modal-overlay').classList.add('hidden');
                 }
             });
-            // Listener para fechar o modal através do botão dentro das ações
             document.getElementById('modal-actions').addEventListener('click', (e) => {
-                 if (e.target.id === 'btn-close-modal') {
+                 if (e.target.id === 'btn-close-modal-report') {
                      document.getElementById('modal-overlay').classList.add('hidden');
                  }
             });
-
         });
     </script>
 </body>

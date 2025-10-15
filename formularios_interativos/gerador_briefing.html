@@ -185,7 +185,8 @@ document.addEventListener('DOMContentLoaded', function() {
                     }
                 } else {
                     this.currentUser = null;
-                    window.location.href = '../auth.html';
+                    // CORREÇÃO: Redirecionamento para o index.html na raiz
+                    window.location.href = '../index.html';
                 }
             });
             document.getElementById('logout-btn').addEventListener('click', () => auth.signOut());

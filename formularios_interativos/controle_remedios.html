@@ -4,31 +4,94 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Meu Enfermeiro Inteligente - Sincronizado</title>
-    <!-- REMOVIDO: Scripts do Firebase antigo -->
-    <!-- ADICIONADO: Scripts do Firebase compat v9 -->
+    
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
-    <!-- ADICIONADO: Importação do arquivo de configuração externo -->
+    
     <script src="../firebase-config.js"></script>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
     <style>
+        /* Estilos Completos e Finais */
         body {
             font-family: 'Poppins', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            color: #2d3748;
             -webkit-tap-highlight-color: transparent;
         }
+
         .dark-mode {
             background: linear-gradient(135deg, #1a202c 0%, #2d3748 100%);
+            color: #e2e8f0;
         }
-        .btn-principal, .btn-secundario, .btn-icon {
+        
+        /* Ajustes para elementos no modo escuro */
+        .dark-mode .bg-white { background-color: #2d3748; }
+        .dark-mode .bg-white\/90 { background-color: rgba(45, 55, 72, 0.9); }
+        .dark-mode .bg-gray-50 { background-color: #1a202c; }
+        .dark-mode .bg-gray-100 { background-color: #171923; }
+        .dark-mode .bg-gray-200 { background-color: #4a5568; }
+        .dark-mode .bg-gray-200:hover { background-color: #718096; }
+        .dark-mode .text-gray-600 { color: #a0aec0; }
+        .dark-mode .text-gray-700 { color: #cbd5e0; }
+        .dark-mode .text-gray-800 { color: #e2e8f0; }
+        .dark-mode .border-gray-200 { border-color: #4a5568; }
+        .dark-mode .border-gray-300 { border-color: #718096; }
+        .dark-mode input, .dark-mode select { background-color: #4a5568; color: #f7fafc; }
+        .dark-mode input::placeholder { color: #a0aec0; }
+        .dark-mode .shadow-lg { box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.15); }
+        .dark-mode .shadow-xl { box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.4), 0 10px 10px -5px rgba(0, 0, 0, 0.1); }
+        .dark-mode .tab-btn { background-color: #2c3547; color: #9faec2;}
+        .dark-mode .tab-btn.active { background-color: #4c51bf; color: #ffffff;}
+        
+        /* Efeitos de Transição e Animação */
+        .btn-principal, .btn-secundario, .btn-icon, .tab-btn, button, a {
             transition: all 0.2s ease-in-out;
         }
-        .btn-principal:active, .btn-secundario:active, .btn-icon:active {
+
+        .btn-principal:active, .btn-secundario:active, .btn-icon:active, button:active, a:active {
             transform: scale(0.95);
         }
-        /* Estilos restantes do seu CSS original */
-        /* ... (restante do CSS do seu arquivo original)... */
+        
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Estilo dos Botões de Tab */
+        .tab-btn {
+            font-weight: 500;
+        }
+        .tab-btn.active {
+            background-color: #4f46e5;
+            color: white;
+            box-shadow: 0 4px 14px 0 rgba(79, 70, 229, 0.39);
+        }
+
+        /* Estilos para Impressão */
+        @media print {
+            .print\:hidden {
+                display: none !important;
+            }
+            body {
+                background: none;
+            }
+            header, footer, .no-print {
+                display: none !important;
+            }
+        }
     </style>
 </head>
 <body class="bg-gray-100 text-gray-800 min-h-screen">
@@ -67,7 +130,6 @@
         </header>
 
         <main>
-            <!-- Aba Pacientes -->
             <div id="tab-pacientes" class="tab-content active">
                 <div class="bg-white rounded-2xl shadow-lg p-6 mb-6">
                     <h2 class="text-xl font-bold mb-4 text-indigo-700">Adicionar Novo Paciente</h2>
@@ -80,7 +142,6 @@
                 <div id="pacientes-lista" class="space-y-6"></div>
             </div>
 
-            <!-- Aba Tratamentos -->
             <div id="tab-tratamentos" class="tab-content">
                  <div class="bg-white rounded-2xl shadow-lg p-6 mb-6">
                     <h2 class="text-xl font-bold mb-4 text-indigo-700">Adicionar Novo Tratamento</h2>
@@ -142,7 +203,6 @@
                 <div id="tratamentos-lista" class="space-y-6"></div>
             </div>
 
-            <!-- Aba Checklist -->
             <div id="tab-checklist" class="tab-content">
                 <div id="placeholder" class="bg-white rounded-2xl shadow-lg p-8 text-center mb-6" style="display: none;">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto text-gray-400 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -177,7 +237,6 @@
                 </div>
             </div>
 
-            <!-- Aba Relatórios -->
             <div id="tab-relatorios" class="tab-content">
                 <div class="bg-white rounded-2xl shadow-lg p-6 mb-6">
                     <h2 class="text-xl font-bold mb-4 text-indigo-700">Exportar Dados</h2>
@@ -193,7 +252,6 @@
                 <div id="relatorios-lista" class="space-y-6"></div>
             </div>
 
-            <!-- Aba Configurações -->
             <div id="tab-config" class="tab-content">
                 <div class="bg-white rounded-2xl shadow-lg p-6 mb-6">
                     <h2 class="text-xl font-bold mb-4 text-indigo-700">Configurações do App</h2>
@@ -241,7 +299,6 @@
         </footer>
     </div>
 
-    <!-- Overlay para Modais -->
     <div id="modal-overlay" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
         <div class="bg-white rounded-2xl shadow-2xl w-11/12 max-w-md p-6">
             <div class="flex justify-between items-center mb-4">
@@ -257,17 +314,12 @@
         </div>
     </div>
 
-    <!-- Toast Container -->
     <div id="toast-container" class="fixed bottom-4 right-4 z-50 space-y-2"></div>
 
     <script>
-        // REMOVIDO: Objeto firebaseConfig antigo
-        // REMOVIDO: Chamada firebase.initializeApp(firebaseConfig);
-
-        // INICIALIZA O FIREBASE COM A CONFIGURAÇÃO EXTERNA
-        // As variáveis auth e database são exportadas pelo firebase-config.js
-        // const auth = firebase.auth(); // Já disponível via firebase-config.js
-        // const database = firebase.database(); // Já disponível via firebase-config.js
+        // O CÓDIGO DE CONFIGURAÇÃO E INICIALIZAÇÃO FOI REMOVIDO DAQUI.
+        // As variáveis `auth` e `database` agora são globais, pois foram definidas
+        // pelo arquivo `firebase-config.js`, que foi carregado anteriormente no <head>.
 
         // ========================================
         // MÓDULO DE GERENCIAMENTO DE DADOS (FIREBASE)
@@ -838,7 +890,7 @@
 
 
         // ========================================
-        // GERENCIADOR DE NOTIFICAÇÕÕES
+        // GERENCIADOR DE NOTIFICAÇÕES
         // ========================================
         const NotificationManager = {
             intervalId: null,

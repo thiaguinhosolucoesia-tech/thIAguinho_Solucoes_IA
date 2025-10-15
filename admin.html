@@ -180,16 +180,16 @@
                 const data = snapshot.val() || {};
 
                 let summaryHtml = '<div class="usage-summary">';
-
-                // Contagem para Listas de Compras (todas as versões)
+                
+                // Contagem para Listas de Compras
                 const listaFacilCount = data.items ? Object.keys(data.items).length : 0;
                 const listaRapidaCount = data.shopping_list_rapida?.items ? Object.keys(data.shopping_list_rapida.items).length : 0;
                 summaryHtml += `<p><strong>Listas de Compras:</strong> ${listaFacilCount + listaRapidaCount} itens criados.</p>`;
 
-                // Relatórios de Compra (se existir)
+                // Relatórios de Compra
                 const reportsCount = data.shopping_reports?.reports ? Object.keys(data.shopping_reports.reports).length : 0;
                 summaryHtml += `<p><strong>Relatórios de Compra:</strong> ${reportsCount} relatórios salvos.</p>`;
-
+                
                 // Gerador de Briefing
                 const briefingsCount = data.paineis_de_inteligencia ? Object.keys(data.paineis_de_inteligencia).length : 0;
                 summaryHtml += `<p><strong>Gerador de Briefing:</strong> ${briefingsCount} briefings criados.</p>`;
@@ -203,16 +203,18 @@
                 const patients = enfermeiroData.patients || {};
                 const patientsCount = Object.keys(patients).length;
                 let remediosCount = 0;
+                
                 // Itera sobre os nós de cada paciente para somar os tratamentos
                 for (const patientId of Object.keys(patients)) {
                     const patientNode = enfermeiroData[patientId];
+                    // Verifica se o nó do paciente existe e se o array de tratamentos também
                     if (patientNode && Array.isArray(patientNode.tratamentos)) {
                         remediosCount += patientNode.tratamentos.length;
                     }
                 }
                 summaryHtml += `<p><strong>Controle de Remédios:</strong> ${remediosCount} tratamentos para ${patientsCount} pacientes.</p>`;
 
-                // Cálculo do tamanho total
+                // Cálculo do tamanho total do nó easy_lists
                 const totalDataSize = JSON.stringify(data).length;
                 const dataInKB = (totalDataSize / 1024).toFixed(2);
                 summaryHtml += `<hr><p><strong>Estimativa de Uso Total de Dados:</strong> ${dataInKB} KB</p>`;

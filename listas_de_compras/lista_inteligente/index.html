@@ -64,7 +64,7 @@
     </div>
     
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database.compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
 
     <script src="../../firebase-config.js"></script>
@@ -75,7 +75,6 @@
         const App = {
             currentUser: null,
             itemsRef: null,
-            // Adicionado um timer para o caso de o Firebase demorar a responder
             authTimeout: null,
 
             init() {
@@ -84,7 +83,7 @@
             },
 
             showView(view) {
-                clearTimeout(this.authTimeout); // Limpa o timer se a autenticação for bem-sucedida
+                clearTimeout(this.authTimeout);
                 document.getElementById('app-container').style.display = (view === 'app') ? 'flex' : 'none';
                 document.getElementById('auth-container').style.display = (view === 'auth') ? 'flex' : 'none';
             },
@@ -96,7 +95,7 @@
             },
 
             addAuthListener() {
-                // Inicia um timer. Se a autenticação não responder em 3 segundos, assume que é modo anônimo.
+                // LÓGICA APERFEIÇOADA PARA MODO ANÔNIMO
                 this.authTimeout = setTimeout(() => {
                     this.showAuthMessage(
                         'Modo Anônimo Detectado', 
@@ -105,7 +104,7 @@
                 }, 3000);
 
                 auth.onAuthStateChanged(async user => {
-                    clearTimeout(this.authTimeout); // Limpa o timer assim que o Firebase responde
+                    clearTimeout(this.authTimeout);
 
                     if (user) {
                         const userRef = database.ref(`users_public_list/${user.uid}`);
@@ -154,7 +153,7 @@
                     if (!items) { alert("Sua lista está vazia!"); return; }
                     const location = prompt("Onde a compra foi realizada? (Deixe em branco se não aplicável)", "Não informado");
                     const total = Object.values(items).reduce((sum, item) => sum + (item.checked ? item.price : 0), 0);
-                    let reportContent = `*** CUPOM FISCAL ***\n\nLOCAL: ${location}\nDATA: ${new Date().toLocaleString('pt-BR')}\n--------------------------------\nITEM      QTD    PREÇO    TOTAL\n--------------------------------\n`;
+                    let reportContent = `*** CUPOM FISCAL ***\n\nLOCAL: ${location || 'Não informado'}\nDATA: ${new Date().toLocaleString('pt-BR')}\n--------------------------------\nITEM      QTD    PREÇO    TOTAL\n--------------------------------\n`;
                     Object.values(items).forEach(item => { if (item.checked) { const name = item.name.padEnd(10); const price = item.price.toFixed(2).padStart(7); const totalItem = (item.price).toFixed(2).padStart(7); reportContent += `${name}  1 x ${price} = ${totalItem}\n`; } });
                     reportContent += `--------------------------------\nTOTAL A PAGAR: R$ ${total.toFixed(2)}\n\n***** thIAguinho Soluções *****`;
                     const reportsRef = database.ref(`purchase_reports/${App.currentUser.uid}`);

@@ -116,7 +116,7 @@
                     <button type="submit" class="btn btn-primary" title="Adicionar">+</button>
                 </form>
                 <button id="btn-finalizar" class="btn btn-success" title="Finalizar Compra e Gerar Relatório">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
                 </button>
             </div>
         </header>
@@ -135,7 +135,7 @@
         </main>
 
         <footer class="calculator-footer">
-            <button id="toggle-calc-btn" title="Mostrar/Ocultar Calculadora"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"></polyline></svg></button>
+            <button id="toggle-calc-btn" title="Mostrar/Ocultar Calculadora"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"></polyline></svg></button>
             <div class="calculator-body">
                 <div class="calculator-display-wrapper">
                     <div id="active-item-display">Nenhum item selecionado</div>
@@ -179,13 +179,13 @@
 <script>
 document.addEventListener('DOMContentLoaded', () => {
     
-    // --- REMOVIDO: Bloco de configuração antigo e inicialização local foram completamente removidos daqui. ---
+    // --- NENHUMA CONFIGURAÇÃO DE FIREBASE AQUI ---
+    // A inicialização agora é feita 100% pelo `firebase-config.js`
     
     let listRef = null;
     let reportsRef = null;
     let userId = null;
 
-    // As variáveis `auth` e `database` são globais, definidas pelo `firebase-config.js`
     auth.onAuthStateChanged(async user => {
         if (user) {
             // ADICIONADO: Verificação de Segurança V2
@@ -205,7 +205,6 @@ document.addEventListener('DOMContentLoaded', () => {
             document.querySelector('.app-container').classList.add('loaded');
             interactions.initDataListeners();
         } else {
-            // CORRIGIDO: Caminho de redirecionamento para a nova estrutura de pastas
             window.location.replace('../../index.html');
         }
     });
@@ -317,7 +316,7 @@ document.addEventListener('DOMContentLoaded', () => {
             li.className = `item-row status-${item.status}`;
             li.dataset.id = item.id;
             const priceInfo = item.status === 'comprado' ? `<div class="item-price-info">${item.quantidade} × R$ ${item.preco.toFixed(2)} = R$ ${(item.quantidade * item.preco).toFixed(2)}</div>` : '';
-            li.innerHTML = `<span class="item-emoji">${item.emoji}</span><div class="item-details"><div class="item-name">${item.nome}</div>${priceInfo}</div><button class="delete-btn" data-id="${item.id}"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewbox="0 0 24 24" fill="none" stroke="#ff3b30" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg></button>`;
+            li.innerHTML = `<span class="item-emoji">${item.emoji}</span><div class="item-details"><div class="item-name">${item.nome}</div>${priceInfo}</div><button class="delete-btn" data-id="${item.id}"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ff3b30" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg></button>`;
             return li;
         },
         reports: () => {
@@ -340,7 +339,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         <div class="report-total">Total: R$ ${report.total.toFixed(2)}</div>
                     </div>
                     <button class="delete-report-btn" data-id="${report.id}" title="Excluir Relatório">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewbox="0 0 24 24" fill="none" stroke="#ff3b30" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ff3b30" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
                     </button>
                 `;
                 listEl.appendChild(li);

@@ -179,8 +179,8 @@
 <script>
 document.addEventListener('DOMContentLoaded', () => {
     
-    // --- NENHUMA CONFIGURAÇÃO DE FIREBASE AQUI ---
-    // A inicialização agora é feita 100% pelo `firebase-config.js`
+    // Nenhuma configuração de API ou inicialização do Firebase aqui.
+    // Tudo é gerenciado pelo `firebase-config.js` carregado no <head>.
     
     let listRef = null;
     let reportsRef = null;
@@ -188,7 +188,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     auth.onAuthStateChanged(async user => {
         if (user) {
-            // ADICIONADO: Verificação de Segurança V2
             const userPublicRef = database.ref(`users_public_list/${user.uid}`);
             const snapshot = await userPublicRef.once('value');
             const userData = snapshot.val();
